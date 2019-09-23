@@ -9,12 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="API_KEY" />
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".IndexActivity"></activity>
-        <activity android:name=".MypageActivity"></activity>
         <activity android:name=".testActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
