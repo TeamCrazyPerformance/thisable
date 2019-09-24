@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/hospital"
+        android:title="병원" />
+    <item
+        android:id="@+id/pharmacy"
+        android:title="약국"/>
+    <item
+        android:id="@+id/electronic_wheelchair"
+        android:title="전동휠체어 충전소"/>
+</menu>

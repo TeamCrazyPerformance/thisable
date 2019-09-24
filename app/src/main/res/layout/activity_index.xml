@@ -47,7 +47,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.579"
         tools:layout_conversion_absoluteHeight="0dp"
-        tools:layout_conversion_absoluteWidth="0dp" />
+        tools:layout_conversion_absoluteWidth="0dp"
+        android:layout_marginRight="60dp" />
 
 
     <ImageButton
@@ -69,7 +70,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.836"
         tools:layout_conversion_absoluteHeight="0dp"
-        tools:layout_conversion_absoluteWidth="0dp" />
+        tools:layout_conversion_absoluteWidth="0dp"
+        android:layout_marginRight="60dp" />
 
     <ImageButton
         android:id="@+id/restaurant"
@@ -109,7 +111,8 @@
         app:layout_constraintLeft_toRightOf="@id/textView3"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.918" />
+        app:layout_constraintVertical_bias="0.918"
+        android:layout_marginRight="84dp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -146,7 +149,8 @@
         app:layout_constraintLeft_toRightOf="@id/textView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.683" />
+        app:layout_constraintVertical_bias="0.683"
+        android:layout_marginRight="98dp" />
 
     <ImageButton
         android:id="@+id/profile"
@@ -158,13 +162,15 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile" />
+        app:srcCompat="@drawable/profile"
+        android:layout_marginRight="16dp" />
 
     <ImageButton
         android:id="@+id/emergency"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:background="#ffffff"
         android:scaleType="fitCenter"
