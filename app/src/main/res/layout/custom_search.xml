@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
@@ -28,84 +29,84 @@
 
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/c1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="주출입구 접근로 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox3"
+            android:id="@+id/c2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인 전용 주차구역 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox4"
+            android:id="@+id/c3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="주출입구 높이차이 제거 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox5"
+            android:id="@+id/c4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인용 승강기 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox6"
+            android:id="@+id/c5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인 화장실 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox7"
+            android:id="@+id/c6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인용 객실 이용가능 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox8"
+            android:id="@+id/c7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인용 관람석 이용가능 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox9"
+            android:id="@+id/c8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="장애인 매표소 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox10"
+            android:id="@+id/c9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="시각장애인 편의서비스 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox11"
+            android:id="@+id/c10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="청각장애인 편의서비스 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox12"
+            android:id="@+id/c11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="안내 서비스 여부" />
 
         <CheckBox
-            android:id="@+id/checkBox13"
+            android:id="@+id/c12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -120,23 +121,25 @@
         android:layout_margin="20dp">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UPDATE"
             android:background="#808080"
             android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintEnd_toStartOf="@+id/delete"
             android:layout_marginRight="10dp"
-            android:padding="0dp"/>
+            android:padding="0dp"
+            tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DELETE"
             android:textColor="#FFFFFF"
             android:background="#ff4d4d"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

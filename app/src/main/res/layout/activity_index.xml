@@ -176,7 +176,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/emergency" />
+        app:srcCompat="@drawable/emergency"
+        android:layout_marginLeft="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
