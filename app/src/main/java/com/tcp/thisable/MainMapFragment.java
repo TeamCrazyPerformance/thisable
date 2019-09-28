@@ -1,5 +1,6 @@
 package com.tcp.thisable;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -41,9 +42,38 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
         listarray = d;
 
-        for(Data data: listarray) {
-            gMap.addMarker(new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name));
+        for(final Data data: listarray) {
+            MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name);
+            gMap.addMarker(markerOptions);
+            gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Intent intent = new Intent(getActivity(),PlaceActivity.class);
+                    intent.putExtra("type",data.type);
+                    intent.putExtra("uniqueid",data.uniqueid);
+                    intent.putExtra("name",data.name);
+                    intent.putExtra("address",data.address);
+                    intent.putExtra("tel",data.tel);
+                    intent.putExtra("homepage",data.homepage);
+                    intent.putExtra("mainroad",data.mainroad);
+                    intent.putExtra("parking",data.parking);
+                    intent.putExtra("mainflat",data.mainflat);
+                    intent.putExtra("elevator",data.elevator);
+                    intent.putExtra("toilet",data.toilet);
+                    intent.putExtra("room",data.room);
+                    intent.putExtra("seat",data.seat);
+                    intent.putExtra("ticket",data.ticket);
+                    intent.putExtra("blind",data.blind);
+                    intent.putExtra("deaf",data.deaf);
+                    intent.putExtra("guide",data.guide);
+                    intent.putExtra("wheelchair",data.wheelchair);
+                    startActivity(intent);
+                    return false;
+                }
+            });
         }
+
     }
 
     @Override
@@ -114,4 +144,5 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         if(mapView != null)
             mapView.onCreate(savedInstanceState);
     }
+
 }

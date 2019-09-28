@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setFragment(0);
+
     }
 
     public void setFragment(int n) {

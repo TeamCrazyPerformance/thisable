@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -43,12 +43,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/homepage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.45">
+        android:layout_weight="0.4">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,84 +70,84 @@
 
 
             <CheckBox
-                android:id="@+id/c1"
+                android:id="@+id/p1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="주출입구 접근로 여부" />
 
             <CheckBox
-                android:id="@+id/c2"
+                android:id="@+id/p2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인 전용 주차구역 여부" />
 
             <CheckBox
-                android:id="@+id/c3"
+                android:id="@+id/p3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="주출입구 높이차이 제거 여부" />
 
             <CheckBox
-                android:id="@+id/c4"
+                android:id="@+id/p4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인용 승강기 여부" />
 
             <CheckBox
-                android:id="@+id/c5"
+                android:id="@+id/p5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인 화장실 여부" />
 
             <CheckBox
-                android:id="@+id/c6"
+                android:id="@+id/p6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인용 객실 이용가능 여부" />
 
             <CheckBox
-                android:id="@+id/c7"
+                android:id="@+id/p7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인용 관람석 이용가능 여부" />
 
             <CheckBox
-                android:id="@+id/c8"
+                android:id="@+id/p8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="장애인 매표소 여부" />
 
             <CheckBox
-                android:id="@+id/c9"
+                android:id="@+id/p9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="시각장애인 편의서비스 여부" />
 
             <CheckBox
-                android:id="@+id/c10"
+                android:id="@+id/p10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="청각장애인 편의서비스 여부" />
 
             <CheckBox
-                android:id="@+id/c11"
+                android:id="@+id/p11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="안내 서비스 여부" />
 
             <CheckBox
-                android:id="@+id/c12"
+                android:id="@+id/p12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -152,14 +164,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.45">
+        android:layout_weight="0.4">
 
-        <LinearLayout
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:id="@+id/place_review"
+            >
 
-        </LinearLayout>
-
+        </ListView>
     </ScrollView>
 </LinearLayout>
