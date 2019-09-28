@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
         final DBHelper dbHelper = new DBHelper(getApplicationContext(),"Search.db", null,1);
         search_size = dbHelper.getsize();
-        mainMapFragment = new MainMapFragment();
-        mainListFragment = new MainListFragment();
         search_button_layout = findViewById(R.id.search_button_layout);
 
         for(int i=1; i<search_size+1; i++){
@@ -100,8 +98,11 @@ public class MainActivity extends AppCompatActivity {
                                 listarray.add(data);
                             }
 
-                            MainMapFragment frag = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                            frag.updateUi(listarray);
+                            mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                            mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+                            if(mainMapFragment != null) mainMapFragment.updateUi(listarray);
+                            if(mainListFragment != null) mainListFragment.updateUi(listarray);
                         }
                     }
 
@@ -113,18 +114,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setFragment(0);
+        mainMapFragment = new MainMapFragment();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_frame, mainMapFragment, "MAP").commit();
     }
 
     public void setFragment(int n) {
         fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (n == 0)
-            fragmentTransaction.replace(R.id.fragment_frame, mainMapFragment, "MAP");
-        else if (n == 1)
-            fragmentTransaction.replace(R.id.fragment_frame, mainListFragment, "LIST");
+        if(n == 0) {
+            if(mainMapFragment == null) {
+                mainMapFragment = new MainMapFragment();
+                fragmentManager.beginTransaction().add(R.id.fragment_frame, mainMapFragment, "MAP").commit();
+                mainMapFragment.updateUi(listarray);
+            }
 
-        fragmentTransaction.commit();
+            if(mainMapFragment != null) fragmentManager.beginTransaction().show(mainMapFragment).commit();
+            if(mainListFragment != null) fragmentManager.beginTransaction().hide(mainListFragment).commit();
+        }
+        else if(n == 1) {
+            if(mainListFragment == null) {
+                mainListFragment = new MainListFragment();
+                fragmentManager.beginTransaction().add(R.id.fragment_frame, mainListFragment, "LIST").commit();
+                mainListFragment.updateUi(listarray);
+            }
+
+            if(mainMapFragment != null) fragmentManager.beginTransaction().hide(mainMapFragment).commit();
+            if(mainListFragment != null) fragmentManager.beginTransaction().show(mainListFragment).commit();
+        }
     }
 }

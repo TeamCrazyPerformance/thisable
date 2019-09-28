@@ -25,4 +25,5 @@ public class Data {
     @SerializedName("guide") public Boolean guide;
     @SerializedName("wheelchair") public Boolean wheelchair;
     @SerializedName("location") public Location location;
+    @SerializedName("rating") public Rating rating;
 }
