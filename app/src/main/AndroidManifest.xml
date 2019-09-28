@@ -3,18 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tcp.thisable">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="API_KEY" />
+            android:value="AIzaSyAl2wDQL3A_6BJzfxeuliD3AEJzyQyRB9w" />
         <activity android:name=".IndexActivity"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".MypageActivity"></activity>

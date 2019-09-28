@@ -9,17 +9,16 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.tcp.thisable.Dao.Review;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListViewAdapter extends BaseAdapter {
-    private ArrayList<ListVO> listVO = null;
+    private ArrayList<Review> listVO = null;
     private int count = 0;
     LayoutInflater inflater = null;
 
-    public ListViewAdapter(ArrayList<ListVO> listVO){
+    public ListViewAdapter(ArrayList<Review> listVO){
         this.listVO = listVO;
         this.count = listVO.size();
     }
@@ -56,10 +55,10 @@ public class ListViewAdapter extends BaseAdapter {
         TextView comment = convertView.findViewById(R.id.comment);
         Button button = convertView.findViewById(R.id.delete_review);
 
-        place_name.setText(listVO.get(i).place_name);
+        place_name.setText(listVO.get(i).name);
         rating.setMax(5);
         rating.setRating(listVO.get(i).rating);
-        comment.setText(listVO.get(i).comment);
+        comment.setText(listVO.get(i).content);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +67,6 @@ public class ListViewAdapter extends BaseAdapter {
 
             }
         });
-
-
 
         return convertView;
     }

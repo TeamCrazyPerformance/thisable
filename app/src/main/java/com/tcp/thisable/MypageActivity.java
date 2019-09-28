@@ -1,43 +1,21 @@
 package com.tcp.thisable;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
+import com.tcp.thisable.Dao.Review;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +24,8 @@ public class MypageActivity extends AppCompatActivity {
 
     ListView listView;
     LinearLayout searchlayout;
-    String comment;
-    ArrayList<ListVO> listarray = new ArrayList<>();
+    Review review;
+    ArrayList<Review> listarray = new ArrayList<>();
 
 
     @Override
@@ -100,32 +78,25 @@ public class MypageActivity extends AppCompatActivity {
         }
 
 
-        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getListRepos("user");
-        res.enqueue(new Callback<ArrayList<JsonObject>>() {
+        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getListRepos("5d8f29b5c69ca87bf20404f7");
+        res.enqueue(new Callback<ArrayList<Review>>() {
             @Override
-            public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
+            public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
                 Log.d("Retrofit", response.toString());
                 if (response.body() != null) {
 
                     for (int i = 0; i < response.body().size(); i++) {
-                        comment = response.body().get(i).get("content").toString();
-                        ListVO listVO = new ListVO();
-                        listVO.place_name = "a";
-                        listVO.rating = (float) 3;
-                        listVO.comment = comment;
-
-                        listarray.add(listVO);
-
+                        review = response.body().get(i);
+                        listarray.add(review);
                     }
                 }
                 ListViewAdapter adapter = new ListViewAdapter(listarray);
                 listView.setAdapter(adapter);
-
             }
 
             @Override
-            public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-
+            public void onFailure(Call<ArrayList<Review>> call, Throwable t) {
+                Log.d("Retrofit", t.toString());
             }
         });
 

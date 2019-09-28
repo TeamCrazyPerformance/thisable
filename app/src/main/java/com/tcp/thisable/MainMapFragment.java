@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -18,11 +21,29 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.tcp.thisable.Dao.Data;
+
+import java.util.ArrayList;
 
 public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
 
+    ArrayList<Data> listarray = new ArrayList<>();
+    GoogleMap gMap;
+
     public MainMapFragment() {
+    }
+
+    public void updateUi(ArrayList<Data> d) {
+        gMap.clear();
+
+        listarray = d;
+
+        for(Data data: listarray) {
+            gMap.addMarker(new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name));
+        }
     }
 
     @Override
@@ -40,6 +61,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         LatLng SEOUL = new LatLng(37.56, 126.97);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+        gMap = googleMap;
     }
 
     @Override

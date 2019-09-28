@@ -5,13 +5,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.gson.JsonArray;
+import com.tcp.thisable.Dao.Data;
+import com.tcp.thisable.Dao.Review;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
@@ -20,9 +31,16 @@ public class MainActivity extends AppCompatActivity {
     MainMapFragment mainMapFragment;
     MainListFragment mainListFragment;
     LinearLayout search_button_layout;
+
+    Button searchButton;
+    EditText searchEdittext;
+
     int search_size;
     int list[];
 
+    ArrayList<Data> listarray = new ArrayList<>();
+
+    Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +82,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchEdittext = findViewById(R.id.search_editText);
+        searchButton = findViewById(R.id.search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", 127f, 30f, searchEdittext.getText().toString(), "{}");
+                res.enqueue(new Callback<ArrayList<Data>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
+                        Log.d("Retrofit", response.toString());
+                        if (response.body() != null) {
+                            listarray.clear();
+                            for (int i = 0; i < response.body().size(); i++) {
+                                data = response.body().get(i);
+                                listarray.add(data);
+                            }
+
+                            MainMapFragment frag = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                            frag.updateUi(listarray);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
+                        Log.d("Retrofit", t.toString());
+                    }
+                });
+            }
+        });
+
         setFragment(0);
     }
 
@@ -72,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
 
         if (n == 0)
-            fragmentTransaction.replace(R.id.fragment_frame, mainMapFragment);
+            fragmentTransaction.replace(R.id.fragment_frame, mainMapFragment, "MAP");
         else if (n == 1)
-            fragmentTransaction.replace(R.id.fragment_frame, mainListFragment);
+            fragmentTransaction.replace(R.id.fragment_frame, mainListFragment, "LIST");
 
         fragmentTransaction.commit();
     }
