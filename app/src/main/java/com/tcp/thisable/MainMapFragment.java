@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,6 +35,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
     ArrayList<Data> listarray = new ArrayList<>();
     GoogleMap gMap;
+    ConstraintLayout constraintLayout_bottom;
+    TextView bottom_name;
+    TextView bottom_address;
+
+    ArrayList<Marker> markers = new ArrayList<>();
 
     public MainMapFragment() {
     }
@@ -42,36 +49,10 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
         listarray = d;
 
-        for(final Data data: listarray) {
+        int i = 0;
+        for(Data data: listarray) {
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name);
-            gMap.addMarker(markerOptions);
-            gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    Intent intent = new Intent(getActivity(),PlaceActivity.class);
-                    intent.putExtra("type",data.type);
-                    intent.putExtra("uniqueid",data.uniqueid);
-                    intent.putExtra("name",data.name);
-                    intent.putExtra("address",data.address);
-                    intent.putExtra("tel",data.tel);
-                    intent.putExtra("homepage",data.homepage);
-                    intent.putExtra("mainroad",data.mainroad);
-                    intent.putExtra("parking",data.parking);
-                    intent.putExtra("mainflat",data.mainflat);
-                    intent.putExtra("elevator",data.elevator);
-                    intent.putExtra("toilet",data.toilet);
-                    intent.putExtra("room",data.room);
-                    intent.putExtra("seat",data.seat);
-                    intent.putExtra("ticket",data.ticket);
-                    intent.putExtra("blind",data.blind);
-                    intent.putExtra("deaf",data.deaf);
-                    intent.putExtra("guide",data.guide);
-                    intent.putExtra("wheelchair",data.wheelchair);
-                    startActivity(intent);
-                    return false;
-                }
-            });
+            markers.add(gMap.addMarker(markerOptions));
         }
 
     }
@@ -83,6 +64,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
         mapView = view.findViewById(R.id.mapView);
         mapView.getMapAsync(this);
+
+        constraintLayout_bottom = view.findViewById(R.id.constraintLayout_bottomFMM);
+        bottom_address = view.findViewById(R.id.textView_addressFMM);
+        bottom_name = view.findViewById(R.id.textView_nameFMM);
+
         return view;
     }
 
@@ -93,6 +79,53 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 
         gMap = googleMap;
+
+        gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                final int i = markers.indexOf(marker);
+                constraintLayout_bottom.setVisibility(View.VISIBLE);
+                bottom_name.setText(listarray.get(i).name);
+                bottom_address.setText(listarray.get(i).address);
+
+                constraintLayout_bottom.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getActivity(),PlaceActivity.class);
+                                intent.putExtra("type",listarray.get(i).type);
+                                intent.putExtra("uniqueid",listarray.get(i).uniqueid);
+                                intent.putExtra("name",listarray.get(i).name);
+                                intent.putExtra("address",listarray.get(i).address);
+                                intent.putExtra("tel",listarray.get(i).tel);
+                                intent.putExtra("homepage",listarray.get(i).homepage);
+                                intent.putExtra("mainroad",listarray.get(i).mainroad);
+                                intent.putExtra("parking",listarray.get(i).parking);
+                                intent.putExtra("mainflat",listarray.get(i).mainflat);
+                                intent.putExtra("elevator",listarray.get(i).elevator);
+                                intent.putExtra("toilet",listarray.get(i).toilet);
+                                intent.putExtra("room",listarray.get(i).room);
+                                intent.putExtra("seat",listarray.get(i).seat);
+                                intent.putExtra("ticket",listarray.get(i).ticket);
+                                intent.putExtra("blind",listarray.get(i).blind);
+                                intent.putExtra("deaf",listarray.get(i).deaf);
+                                intent.putExtra("guide",listarray.get(i).guide);
+                                intent.putExtra("wheelchair",listarray.get(i).wheelchair);
+                                startActivity(intent);
+                            }
+                        }
+                );
+
+                return false;
+            }
+        });
+
+        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                constraintLayout_bottom.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
