@@ -1,5 +1,6 @@
 package com.tcp.thisable;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +18,45 @@ import java.util.ArrayList;
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewHolder> {
     private ArrayList<Data> datalist;
 
-    public class mViewHolder extends RecyclerView.ViewHolder {
-       TextView textView_name;
-       TextView textView_address;
-       TextView textView_distance;
-       RatingBar ratingBar;
+    public class mViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView textView_name;
+        TextView textView_address;
+        TextView textView_distance;
+        RatingBar ratingBar;
 
         public mViewHolder(View view) {
             super(view);
+
+            view.setOnClickListener(this);
 
             textView_name = view.findViewById(R.id.textView_name_LML);
             textView_address = view.findViewById(R.id.textView_address_LML);
             textView_distance = view.findViewById(R.id.textView_distanceLML);
             ratingBar = view.findViewById(R.id.ratingBar_LML);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(view.getContext(), PlaceActivity.class);
+            intent.putExtra("type", datalist.get(getLayoutPosition()).type);
+            intent.putExtra("uniqueid", datalist.get(getLayoutPosition()).uniqueid);
+            intent.putExtra("name", datalist.get(getLayoutPosition()).name);
+            intent.putExtra("address", datalist.get(getLayoutPosition()).address);
+            intent.putExtra("tel", datalist.get(getLayoutPosition()).tel);
+            intent.putExtra("homepage", datalist.get(getLayoutPosition()).homepage);
+            intent.putExtra("mainroad", datalist.get(getLayoutPosition()).mainroad);
+            intent.putExtra("parking", datalist.get(getLayoutPosition()).parking);
+            intent.putExtra("mainflat", datalist.get(getLayoutPosition()).mainflat);
+            intent.putExtra("elevator", datalist.get(getLayoutPosition()).elevator);
+            intent.putExtra("toilet", datalist.get(getLayoutPosition()).toilet);
+            intent.putExtra("room", datalist.get(getLayoutPosition()).room);
+            intent.putExtra("seat", datalist.get(getLayoutPosition()).seat);
+            intent.putExtra("ticket", datalist.get(getLayoutPosition()).ticket);
+            intent.putExtra("blind", datalist.get(getLayoutPosition()).blind);
+            intent.putExtra("deaf", datalist.get(getLayoutPosition()).deaf);
+            intent.putExtra("guide", datalist.get(getLayoutPosition()).guide);
+            intent.putExtra("wheelchair", datalist.get(getLayoutPosition()).wheelchair);
+            view.getContext().startActivity(intent);
         }
     }
 
