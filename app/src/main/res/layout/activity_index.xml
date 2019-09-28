@@ -182,21 +182,9 @@
         android:id="@+id/mark"
         android:layout_width="89dp"
         android:layout_height="117dp"
-        app:srcCompat="@drawable/mark"
-        tools:layout_editor_absoluteX="-33dp"
-        tools:layout_editor_absoluteY="580dp" />
-
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="276dp"
-        android:background="@drawable/custom_button"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_food" />
+        app:srcCompat="@drawable/mark" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
