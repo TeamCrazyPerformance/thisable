@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <translate
         android:fromXDelta="-100%"
-        android:toXDelta="200%"
+        android:toXDelta="600%"
         android:duration="5000"
         android:repeatCount="infinite"
         android:repeatMode="restart" />

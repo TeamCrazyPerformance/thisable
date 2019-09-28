@@ -14,18 +14,30 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity">
+            android:screenOrientation="portrait"
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAl2wDQL3A_6BJzfxeuliD3AEJzyQyRB9w" />
-        <activity android:name=".IndexActivity"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".MypageActivity"></activity>
-        <activity android:name=".testActivity"></activity>
-        <activity android:name=".PlaceActivity"></activity>
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".IndexActivity">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".MainActivity">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".MypageActivity">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".PlaceActivity">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".SearchActivity">
+            android:screenOrientation="portrait"
+        </activity>
         <activity android:name=".StartActivity">
+            android:screenOrientation="portrait"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

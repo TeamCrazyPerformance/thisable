@@ -1,6 +1,7 @@
 package com.tcp.thisable;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -60,7 +61,7 @@ public class IndexActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton lodgment_button = (ImageButton) findViewById(R.id.lodgment);
+        ConstraintLayout lodgment_button = (ConstraintLayout) findViewById(R.id.hotel);
         lodgment_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -69,7 +70,7 @@ public class IndexActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton tour_button = (ImageButton) findViewById(R.id.tour);
+        ConstraintLayout tour_button = (ConstraintLayout) findViewById(R.id.tour);
         tour_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -78,7 +79,7 @@ public class IndexActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton restaurant_button = (ImageButton) findViewById(R.id.restaurant);
+        ConstraintLayout restaurant_button = (ConstraintLayout) findViewById(R.id.restaurant);
         restaurant_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -97,7 +98,7 @@ public class IndexActivity extends AppCompatActivity {
         });
 
 
-        ImageButton convenience_button = (ImageButton) findViewById(R.id.convenience);
+        ConstraintLayout convenience_button = (ConstraintLayout) findViewById(R.id.convinent);
         convenience_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
