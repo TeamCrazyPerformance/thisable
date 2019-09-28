@@ -55,8 +55,9 @@
                 android:paddingRight="44dp"
                 android:paddingBottom="4dp" />
 
+
             <Button
-                android:id="@+id/button"
+                android:id="@+id/search_button"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="right|center_vertical"
@@ -65,17 +66,28 @@
 
         </FrameLayout>
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/search_button_layout">
+
+
+            </LinearLayout>
+
+
+        </HorizontalScrollView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -15,12 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewAdapter extends BaseAdapter {
-    private ArrayList<ListVO> listVO = new ArrayList<ListVO>();
-    public ListViewAdapter(){}
+    private ArrayList<ListVO> listVO = null;
+    private int count = 0;
+    LayoutInflater inflater = null;
+
+    public ListViewAdapter(ArrayList<ListVO> listVO){
+        this.listVO = listVO;
+        this.count = listVO.size();
+    }
 
     @Override
     public int getCount() {
-        return listVO.size();
+        return count;
     }
 
     @Override
@@ -35,12 +41,14 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-        final int pos = i;
-        final Context context = parent.getContext();
-
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.review,parent,false);
+        if (convertView == null)
+        {
+            final Context context = parent.getContext();
+            if (inflater == null)
+            {
+                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            }
+            convertView = inflater.inflate(R.layout.review, parent, false);
         }
 
         TextView place_name = convertView.findViewById(R.id.place_name);
@@ -48,16 +56,15 @@ public class ListViewAdapter extends BaseAdapter {
         TextView comment = convertView.findViewById(R.id.comment);
         Button button = convertView.findViewById(R.id.delete_review);
 
-        ListVO listViewItem = listVO.get(i);
-
-        place_name.setText(listViewItem.getPlace_name());
+        place_name.setText(listVO.get(i).place_name);
         rating.setMax(5);
-        rating.setRating(listViewItem.getRating());
-        comment.setText(listViewItem.getComment());
+        rating.setRating(listVO.get(i).rating);
+        comment.setText(listVO.get(i).comment);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
             }
         });
@@ -67,12 +74,4 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addVO(String place_name,Float rating,String comment) {
-        ListVO item = new ListVO();
-        item.setPlace_name(place_name);
-        item.setRating(rating);
-        item.setComment(comment);
-
-        listVO.add(item);
-    }
 }

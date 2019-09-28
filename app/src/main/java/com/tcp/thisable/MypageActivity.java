@@ -1,11 +1,13 @@
 package com.tcp.thisable;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
+
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,173 +38,97 @@ import javax.net.ssl.HttpsURLConnection;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MypageActivity extends AppCompatActivity {
 
     ListView listView;
-    ListViewAdapter adapter;
-    DBHelper dbHelper;
-    SQLiteDatabase sqLiteDatabase;
-    int customsearch_size;
-    TableLayout customlayout;
-    TableRow tableRow;
-    int j;
+    LinearLayout searchlayout;
+    String comment;
+    ArrayList<ListVO> listarray = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
-
-        Intent intent = new Intent(getApplicationContext(), MypageActivity.class);
-        startActivity(intent);
-
-        new JSONTask().execute("http://.../user/review");
-        dbHelper = new DBHelper(this,"customsearch.db");
-        sqLiteDatabase = dbHelper.getReadableDatabase();
-        customsearch_size = dbHelper.getSize();
-        customlayout = findViewById(R.id.customlayout);
-
-
-        for(int i=0; i< customsearch_size; i++){
-            if (i%2 == 0) tableRow = new TableRow(this);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
+        searchlayout = findViewById(R.id.searchlayout);
+        listView = findViewById(R.id.review_list);
+        int size = dbHelper.getsize();
+        Toast.makeText(getApplicationContext(), Integer.toString(size), Toast.LENGTH_LONG).show();
+        for (int i = 1; i < size + 2; i++) {
 
             Button button = new Button(this);
             button.setBackgroundColor(Color.parseColor("#ffd633"));
+            //LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) button.getLayoutParams();
+            // params.setMargins(20,20,20,20);
+            //button.setLayoutParams(params);
+            button.setTextColor(Color.WHITE);
 
-            if (i == customsearch_size-1) {
+            if (i == size + 1) {
                 button.setText("+");
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent2 = new Intent(getApplicationContext(),CustomActivity.class);
+                        Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
                         intent2.putExtra("index", -1);
                         startActivity(intent2);
+                        finish();
 
                     }
                 });
-            }
-
-            else {
-                j=i;
-                button.setText("맞춤검색 " + (i + 1));
+            } else {
+                button.setText("맞춤조건" + i);
+                final int finalI = i;
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent2 = new Intent(getApplicationContext(), CustomActivity.class);
-                        intent2.putExtra("index", j);
+                        Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
+                        intent2.putExtra("index", finalI);
                         startActivity(intent2);
+                        finish();
+
                     }
                 });
-
             }
 
-            tableRow.addView(button);
-            if (i % 2 == 1) customlayout.addView(tableRow);
-
+            searchlayout.addView(button);
 
         }
 
 
-    }
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getListRepos("user");
+        res.enqueue(new Callback<ArrayList<JsonObject>>() {
+            @Override
+            public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
+                Log.d("Retrofit", response.toString());
+                if (response.body() != null) {
 
+                    for (int i = 0; i < response.body().size(); i++) {
+                        comment = response.body().get(i).get("content").toString();
+                        ListVO listVO = new ListVO();
+                        listVO.place_name = "a";
+                        listVO.rating = (float) 3;
+                        listVO.comment = comment;
 
-    class JSONTask extends AsyncTask<String, String, String>{
+                        listarray.add(listVO);
 
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
-
-                try{
-                    //URL url = new URL("http://.../user/review");
-                    URL url = new URL(urls[0]);//url을 가져온다.
-                    con = (HttpURLConnection) url.openConnection();
-                    con.connect();//연결 수행
-
-                    //입력 스트림 생성
-                    InputStream stream = con.getInputStream();
-
-                    //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
-                    reader = new BufferedReader(new InputStreamReader(stream));
-
-                    //실제 데이터를 받는곳
-                    StringBuffer buffer = new StringBuffer();
-
-                    //line별 스트링을 받기 위한 temp 변수
-                    String line = "";
-
-                    //아래라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
-                    while((line = reader.readLine()) != null){
-                        buffer.append(line);
                     }
-
-                    //다 가져오면 String 형변환을 수행한다. 이유는 protected String doInBackground(String... urls) 니까
-                    return buffer.toString();
-
-                    //아래는 예외처리 부분이다.
-                } catch (MalformedURLException e){
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    //종료가 되면 disconnect메소드를 호출한다.
-                    if(con != null){
-                        con.disconnect();
-                    }
-                    try {
-                        //버퍼를 닫아준다.
-                        if(reader != null){
-                            reader.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }//finally 부분
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        //doInBackground메소드가 끝나면 여기로 와서 텍스트뷰의 값을 바꿔준다.
-        @Override
-        protected void onPostExecute(String result) {
-
-            super.onPostExecute(result);
-            adapter = new ListViewAdapter();
-            listView = findViewById(R.id.review_list);
-            listView.setAdapter(adapter);
-            String place_id = null;
-            String place_name = null;
-            String rating = null;
-            String comment = null;
-
-            try {
-                JSONArray jarray = new JSONObject(result).getJSONArray("reviews");
-                for (int i = 0; i < jarray.length(); i++) {
-                    HashMap map = new HashMap<>();
-                    JSONObject jObject = jarray.getJSONObject(i);
-
-                    //place_id = jObject.optString("place_id");
-                    place_name = jObject.optString("place_name");
-                    rating = jObject.optString("rating");
-                    comment = jObject.optString("comment");
-
-                    adapter.addVO(place_name,Float.parseFloat(rating),comment);
-
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                ListViewAdapter adapter = new ListViewAdapter(listarray);
+                listView.setAdapter(adapter);
+
             }
 
+            @Override
+            public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
 
-        }
-
+            }
+        });
 
     }
-
-
 }
+

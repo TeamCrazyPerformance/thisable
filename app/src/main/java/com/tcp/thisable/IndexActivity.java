@@ -96,6 +96,7 @@ public class IndexActivity extends AppCompatActivity {
             }
         });
 
+
         ImageButton convenience_button = (ImageButton) findViewById(R.id.convenience);
         convenience_button.setOnClickListener(new View.OnClickListener(){
             @Override

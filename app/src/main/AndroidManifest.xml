@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.tcp.thisable">
 
     <application
@@ -14,11 +15,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="API_KEY" />
-
-        <activity android:name=".MainActivity" />
-        <activity android:name=".IndexActivity" />
-        <activity android:name=".MypageActivity" />
-        <activity android:name=".testActivity" />
+        <activity android:name=".IndexActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".testActivity"></activity>
+        <activity android:name=".PlaceActivity"></activity>
+        <activity android:name=".SearchActivity"></activity>
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

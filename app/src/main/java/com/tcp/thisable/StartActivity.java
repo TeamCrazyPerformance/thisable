@@ -31,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         int action = event.getAction();
 
         if(action == MotionEvent.ACTION_DOWN){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), IndexActivity.class);
             startActivity(intent);
             finish();
         }

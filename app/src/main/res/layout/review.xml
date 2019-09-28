@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         >
 
         <TextView
@@ -17,38 +18,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:textSize="10pt"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+
+            />
 
         <RatingBar
             android:id="@+id/rating"
             style="?android:attr/ratingBarStyleSmall"
+            android:layout_toRightOf="@id/place_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/textView2"
-            app:layout_constraintBase_toBaselineOf="parent"
-            />
+            android:layout_centerVertical="true"/>
 
         <Button
+            android:id="@+id/delete_review"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="0dp"
             android:background="#ff4d4d"
-            app:layout_constraintRight_toRightOf="parent"
-            android:minHeight="10dip"
-            android:minWidth="10dip"
-            android:padding="5dp"
-            android:layout_margin="5dp"
-            android:textColor="#FFFFFF"
             android:text="DELETE"
-            android:textSize="10dp"
-            android:id="@+id/delete_review"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textColor="#FFFFFF"
+            android:layout_centerVertical="true"
+            android:textSize="15dp"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_marginLeft="5dp"/>
+        />
 </LinearLayout>

@@ -24,43 +24,14 @@
         android:layout_weight="0.3"
         android:background="@drawable/border_shadow">
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/customlayout"
+        android:orientation="vertical"
+        android:id="@+id/searchlayout"
         >
 
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp">
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="#ffd633"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="#ffd633"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:text="Button" />
-        </TableRow>
-    </TableLayout>
+        </LinearLayout>
     </ScrollView>
 
     <ScrollView
@@ -87,25 +58,6 @@
             android:id="@+id/review_list">
 
         </ListView>
-
-
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout="@layout/review" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:background="#808080" />
-
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout="@layout/review" />
-
 
     </LinearLayout>
     </ScrollView>
