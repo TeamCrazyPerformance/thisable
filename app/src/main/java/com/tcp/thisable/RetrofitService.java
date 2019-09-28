@@ -5,8 +5,10 @@ import com.tcp.thisable.Dao.Data;
 import com.tcp.thisable.Dao.Review;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -18,8 +20,11 @@ public interface RetrofitService {
     @GET("review/user/myreview/{user}")
     Call<ArrayList<Review>> getListRepos(@Path("user") String id);
 
-    @GET("data/{type}")
-    Call<ArrayList<Data>> getNearData(@Path("type") String type, @Query("distance") Integer distance, @Query("longitude") Float longitude, @Query("latitude") Float latitude);
+    @POST("user")
+    Call<String> signin(@Body String email, String password);
+
+    @GET("review/{type}/{uniqueid}")
+    Call<ArrayList<Review>> getReviewList(@Path("type") String type, @Path("uniqueid") int id);
 
     @FormUrlEncoded
     @POST("data/{type}")

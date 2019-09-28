@@ -182,6 +182,10 @@
         android:id="@+id/mark"
         android:layout_width="89dp"
         android:layout_height="117dp"
+        app:srcCompat="@drawable/mark"
+        tools:layout_editor_absoluteX="-33dp"
+        tools:layout_editor_absoluteY="580dp"
+        tools:ignore="MissingConstraints" />
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/mark" />
