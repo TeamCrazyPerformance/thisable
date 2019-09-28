@@ -7,17 +7,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 public class IndexActivity extends AppCompatActivity {
 
+    Animation ani;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+
+        final ImageView mark = (ImageView)findViewById(R.id.mark);
+        ani = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation);
+        mark.startAnimation(ani);
 
         ImageButton btn = (ImageButton) findViewById(R.id.emergency);
         btn.setOnClickListener(new View.OnClickListener() {
