@@ -64,5 +64,27 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView_nameFMM"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView_nameFMM" />
+
+        <TextView
+            android:id="@+id/textView_extra1FMM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_addressFMM"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textView_extra2FMM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_extra1FMM"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -39,19 +39,24 @@ public class IndexActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
                         switch (item.getItemId()){
                             case R.id.hospital:
-                                Intent hospitalIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(hospitalIntent);
+                                intent.putExtra("type", "hosp");
+                                break;
                             case R.id.pharmacy:
-                                Intent pharmacyIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(pharmacyIntent);
+                                intent.putExtra("type", "pharm");
+                                break;
                             case R.id.electronic_wheelchair:
-                                Intent wheelchairIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(wheelchairIntent);
+                                intent.putExtra("type", "wheel");
+                                break;
                             default:
                                 break;
                         }
+                        startActivity(intent);
+
                         return false;
                     }
                 });
@@ -65,6 +70,7 @@ public class IndexActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("type", "hotel");
                 startActivity(intent);
             }
         });
@@ -74,6 +80,7 @@ public class IndexActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("type", "tour");
                 startActivity(intent);
             }
         });
@@ -83,6 +90,7 @@ public class IndexActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("type", "food");
                 startActivity(intent);
             }
         });
@@ -102,6 +110,7 @@ public class IndexActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("type", "conv");
                 startActivity(intent);
             }
         });

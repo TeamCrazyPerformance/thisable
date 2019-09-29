@@ -182,18 +182,18 @@
     </LinearLayout>
 
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="0.35">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/place_review"
             android:paddingLeft="10dp"
             >
 
-        </ListView>
-    </ScrollView>
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
 </LinearLayout>

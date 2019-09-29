@@ -53,12 +53,12 @@
             android:background="@drawable/border_shadow"
             >
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/review_list">
 
-            </ListView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
 </LinearLayout>

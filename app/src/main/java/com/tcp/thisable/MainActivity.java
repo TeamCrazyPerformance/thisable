@@ -13,22 +13,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.JsonArray;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.tcp.thisable.Dao.Data;
-import com.tcp.thisable.Dao.Review;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,9 +42,13 @@ public class MainActivity extends AppCompatActivity {
     int search_size;
     int[] list;
 
+    String type = null;
+
     ArrayList<Data> listarray = new ArrayList<>();
 
     ArrayList<ToggleButton> advtoggle = new ArrayList<>();
+
+    boolean data2Flag = true;
 
     Data data;
 
@@ -60,43 +57,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(),"Search.db", null,1);
-        search_size = dbHelper.getsize();
-        search_button_layout = findViewById(R.id.search_button_layout);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
 
-        for(int i = 1; i < search_size + 1; i++){
-            ToggleButton toggleButton = new ToggleButton(this);
-            toggleButton.setTextOn("맞춤검색"+i);
-            toggleButton.setTextOff("맞춤검색"+i);
-            toggleButton.setText("맞춤검색"+i);
+        type = getIntent().getStringExtra("type");
 
-            LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            layoutParams.rightMargin = 30;
-            toggleButton.setMinimumHeight(0);
-            toggleButton.setMinHeight(0);
-            toggleButton.setBackgroundResource(R.drawable.custom_togglebutton_advsearch);
+        if(type != null && (type.equals("hosp") || type.equals("pharm") || type.equals("wheel"))) {
+            data2Flag = false;
+        }
 
-            //toggleButton.setChecked(false);
-            search_button_layout.addView(toggleButton, layoutParams);
+        else {
+            data2Flag = true;
+            search_size = dbHelper.getsize();
+            search_button_layout = findViewById(R.id.search_button_layout);
 
-            advtoggle.add(toggleButton);
+            for (int i = 1; i < search_size + 1; i++) {
+                ToggleButton toggleButton = new ToggleButton(this);
+                toggleButton.setTextOn("맞춤검색" + i);
+                toggleButton.setTextOff("맞춤검색" + i);
+                toggleButton.setText("맞춤검색" + i);
 
-            final int index = i;
+                LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                layoutParams.rightMargin = 30;
+                toggleButton.setMinimumHeight(0);
+                toggleButton.setMinHeight(0);
+                toggleButton.setBackgroundResource(R.drawable.custom_togglebutton_advsearch);
 
-            toggleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int ind = 1;
-                    for(ToggleButton toggle: advtoggle) {
-                        if(index == ind && toggle.isChecked())
-                            toggle.setChecked(true);
-                        else
-                            toggle.setChecked(false);
+                //toggleButton.setChecked(false);
+                search_button_layout.addView(toggleButton, layoutParams);
 
-                        ind++;
+                advtoggle.add(toggleButton);
+
+                final int index = i;
+
+                toggleButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int ind = 1;
+                        for (ToggleButton toggle : advtoggle) {
+                            if (index == ind && toggle.isChecked())
+                                toggle.setChecked(true);
+                            else
+                                toggle.setChecked(false);
+
+                            ind++;
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         PermissionListener permissionListener = new PermissionListener() {
@@ -143,73 +150,106 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                int i = 1;
-                for (ToggleButton toggle : advtoggle) {
-                    if (toggle.isChecked()) {
-                        list = dbHelper.getList(i);
-                    }
-                    i++;
-                }
+                if(data2Flag) {
+                    String query = "";
 
-                String query = "";
-
-                JSONObject jsonObject = new JSONObject();
-                String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
-
-                try {
-                    for (int j = 0; j < 12; j++)
-                    {
-                        if(list[j] == 1) {
-                            jsonObject.put(keys[j], true);
+                    int i = 1;
+                    for (ToggleButton toggle : advtoggle) {
+                        if (toggle.isChecked()) {
+                            list = dbHelper.getList(i);
                         }
+                        i++;
                     }
 
-                    Log.d("json", jsonObject.toString());
-                    query = jsonObject.toString();
 
-                }
+                    JSONObject jsonObject = new JSONObject();
+                    String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
 
-                catch (Exception e) {
-                    query = "{}";
-                }
-
-
-                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", longitude, latitude, searchEdittext.getText().toString(), query);
-                res.enqueue(new Callback<ArrayList<Data>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
-                        Log.d("Retrofit", response.toString());
-                        if (response.body() != null) {
-                            listarray.clear();
-                            for (int i = 0; i < response.body().size(); i++) {
-                                data = response.body().get(i);
-                                listarray.add(data);
+                    try {
+                        for (int j = 0; j < 12; j++) {
+                            if (list[j] == 1) {
+                                jsonObject.put(keys[j], true);
                             }
+                        }
 
-                            mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                            mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+                        Log.d("json", jsonObject.toString());
+                        query = jsonObject.toString();
 
+                    } catch (Exception e) {
+                        query = "{}";
+                    }
 
-                            if(mainMapFragment != null) mainMapFragment.updateUi(listarray);
-
-                            if(mainListFragment != null) {
-                                if(mainMapFragment != null) {
-                                    if(mainMapFragment.currentLocation != null) {
-                                        mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
-                                    }
+                    Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData(type, longitude, latitude, searchEdittext.getText().toString(), query);
+                    res.enqueue(new Callback<ArrayList<Data>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
+                            Log.d("Retrofit", response.toString());
+                            if (response.body() != null) {
+                                listarray.clear();
+                                for (int i = 0; i < response.body().size(); i++) {
+                                    data = response.body().get(i);
+                                    listarray.add(data);
                                 }
 
-                                else
-                                    mainListFragment.updateUi(listarray, null);
+                                mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                                mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+
+                                if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                                if (mainListFragment != null) {
+                                    if (mainMapFragment != null) {
+                                        if (mainMapFragment.currentLocation != null) {
+                                            mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                        }
+                                    } else
+                                        mainListFragment.updateUi(listarray, null);
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
-                        Log.d("Retrofit", t.toString());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
+                            Log.d("Retrofit", t.toString());
+                        }
+                    });
+                }
+
+                else {
+                    Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData2(type, longitude, latitude, searchEdittext.getText().toString());
+                    res.enqueue(new Callback<ArrayList<Data>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
+                            Log.d("Retrofit", response.toString());
+                            if (response.body() != null) {
+                                listarray.clear();
+                                for (int i = 0; i < response.body().size(); i++) {
+                                    data = response.body().get(i);
+                                    listarray.add(data);
+                                }
+
+                                mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                                mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+                                if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                                if (mainListFragment != null) {
+                                    if (mainMapFragment != null) {
+                                        if (mainMapFragment.currentLocation != null) {
+                                            mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                        }
+                                    } else
+                                        mainListFragment.updateUi(listarray, null);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
+                            Log.d("Retrofit", t.toString());
+                        }
+                    });
+                }
             }
         });
 

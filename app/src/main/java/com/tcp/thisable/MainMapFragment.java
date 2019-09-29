@@ -50,6 +50,9 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     private TextView bottom_distance;
     private RatingBar bottom_rating;
 
+    private TextView bottom_extra1;
+    private TextView bottom_extra2;
+
     private FusedLocationProviderClient fusedLocationProviderClient;
 
     public LatLng currentLocation = null;
@@ -68,6 +71,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         float sum_longtitude = 0;
         float sum_latitude = 0;
 
+        markers.clear();
+
         for(Data data: listarray) {
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name);
             markers.add(gMap.addMarker(markerOptions));
@@ -76,7 +81,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
             sum_latitude += data.location.coordinates[1];
         }
 
-        moveCamera(new LatLng(sum_latitude/size, sum_longtitude/size), 12);
+        if(size != 0)
+            moveCamera(new LatLng(sum_latitude/size, sum_longtitude/size), 12);
     }
 
     @Override
@@ -92,6 +98,9 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         bottom_name = view.findViewById(R.id.textView_nameFMM);
         bottom_distance = view.findViewById(R.id.textView_distanceFMM);
         bottom_rating = view.findViewById(R.id.ratingBar_FMM);
+
+        bottom_extra1 = view.findViewById(R.id.textView_extra1FMM);
+        bottom_extra2 = view.findViewById(R.id.textView_extra2FMM);
 
         return view;
     }
@@ -150,12 +159,72 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 final int i = markers.indexOf(marker);
 
+                Log.d("asd", markers.size() + "," + listarray.size());
+
                 constraintLayout_bottom.setVisibility(View.VISIBLE);
                 bottom_name.setText(listarray.get(i).name);
                 bottom_address.setText(listarray.get(i).address);
 
+                if(listarray.get(i).type.equals("hosp")) {
+                    bottom_rating.setVisibility(View.GONE);
+                    bottom_extra1.setVisibility(View.GONE);
+                    bottom_extra2.setVisibility(View.GONE);
+                }
 
-                bottom_rating.setRating(listarray.get(i).rating.sum / (float)listarray.get(i).rating.count);
+                else if(listarray.get(i).type.equals("pharm")) {
+                    bottom_rating.setVisibility(View.GONE);
+                    bottom_extra1.setVisibility(View.VISIBLE);
+                    bottom_extra2.setVisibility(View.GONE);
+
+                    bottom_extra1.setText(listarray.get(i).pharmtype);
+                }
+
+                else if(listarray.get(i).type.equals("wheel")) {
+                    bottom_rating.setVisibility(View.GONE);
+                    bottom_extra1.setVisibility(View.VISIBLE);
+                    bottom_extra2.setVisibility(View.VISIBLE);
+
+                    bottom_extra1.setText(listarray.get(i).wheelwhere);
+                    bottom_extra2.setText(listarray.get(i).wheeltime);
+                }
+
+                else {
+
+                    bottom_rating.setVisibility(View.VISIBLE);
+                    bottom_extra1.setVisibility(View.GONE);
+                    bottom_extra2.setVisibility(View.GONE);
+
+                    bottom_rating.setRating(listarray.get(i).rating.sum / (float) listarray.get(i).rating.count);
+                    constraintLayout_bottom.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getActivity(),PlaceActivity.class);
+                                    intent.putExtra("type",listarray.get(i).type);
+                                    intent.putExtra("uniqueid",listarray.get(i).uniqueid);
+                                    intent.putExtra("name",listarray.get(i).name);
+                                    intent.putExtra("address",listarray.get(i).address);
+                                    intent.putExtra("tel",listarray.get(i).tel);
+                                    intent.putExtra("homepage",listarray.get(i).homepage);
+                                    intent.putExtra("mainroad",listarray.get(i).mainroad);
+                                    intent.putExtra("parking",listarray.get(i).parking);
+                                    intent.putExtra("mainflat",listarray.get(i).mainflat);
+                                    intent.putExtra("elevator",listarray.get(i).elevator);
+                                    intent.putExtra("toilet",listarray.get(i).toilet);
+                                    intent.putExtra("room",listarray.get(i).room);
+                                    intent.putExtra("seat",listarray.get(i).seat);
+                                    intent.putExtra("ticket",listarray.get(i).ticket);
+                                    intent.putExtra("blind",listarray.get(i).blind);
+                                    intent.putExtra("deaf",listarray.get(i).deaf);
+                                    intent.putExtra("guide",listarray.get(i).guide);
+                                    intent.putExtra("wheelchair",listarray.get(i).wheelchair);
+                                    intent.putExtra("rating_sum",listarray.get(i).rating.sum);
+                                    intent.putExtra("rating_count",listarray.get(i).rating.count);
+                                    startActivity(intent);
+                                }
+                            }
+                    );
+                }
 
                 if(currentLocation == null)
                     bottom_distance.setText("");
@@ -179,36 +248,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                     }
 
                 }
-
-                constraintLayout_bottom.setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(getActivity(),PlaceActivity.class);
-                                intent.putExtra("type",listarray.get(i).type);
-                                intent.putExtra("uniqueid",listarray.get(i).uniqueid);
-                                intent.putExtra("name",listarray.get(i).name);
-                                intent.putExtra("address",listarray.get(i).address);
-                                intent.putExtra("tel",listarray.get(i).tel);
-                                intent.putExtra("homepage",listarray.get(i).homepage);
-                                intent.putExtra("mainroad",listarray.get(i).mainroad);
-                                intent.putExtra("parking",listarray.get(i).parking);
-                                intent.putExtra("mainflat",listarray.get(i).mainflat);
-                                intent.putExtra("elevator",listarray.get(i).elevator);
-                                intent.putExtra("toilet",listarray.get(i).toilet);
-                                intent.putExtra("room",listarray.get(i).room);
-                                intent.putExtra("seat",listarray.get(i).seat);
-                                intent.putExtra("ticket",listarray.get(i).ticket);
-                                intent.putExtra("blind",listarray.get(i).blind);
-                                intent.putExtra("deaf",listarray.get(i).deaf);
-                                intent.putExtra("guide",listarray.get(i).guide);
-                                intent.putExtra("wheelchair",listarray.get(i).wheelchair);
-                                intent.putExtra("rating_sum",listarray.get(i).rating.sum);
-                                intent.putExtra("rating_count",listarray.get(i).rating.count);
-                                startActivity(intent);
-                            }
-                        }
-                );
 
                 return false;
             }

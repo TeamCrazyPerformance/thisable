@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<String> call, Response<String> response) {
 
                         if(response.isSuccessful()) {
-                            SharedPreferences shared = getApplication().getSharedPreferences("MYPREFRENCE", Activity.MODE_PRIVATE);
+                            SharedPreferences shared = getSharedPreferences("MYPREFRENCE", MODE_PRIVATE);
                             SharedPreferences.Editor editor = shared.edit();
                             editor.putString("userid", response.body());
                             editor.commit();

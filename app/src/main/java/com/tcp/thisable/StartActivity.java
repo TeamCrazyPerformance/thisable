@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -32,7 +33,8 @@ public class StartActivity extends AppCompatActivity {
 
     //터치후 화면이동
     public boolean onTouchEvent(MotionEvent event){
-        SharedPreferences shared = getApplication().getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+
         int action = event.getAction();
 
         if(action == MotionEvent.ACTION_DOWN){

@@ -26,4 +26,10 @@ public class Data {
     @SerializedName("wheelchair") public Boolean wheelchair;
     @SerializedName("location") public Location location;
     @SerializedName("rating") public Rating rating;
+
+    // DATA2
+    @SerializedName("pharmtype") public String pharmtype;
+
+    @SerializedName("wheelwhere") public String wheelwhere;
+    @SerializedName("wheeltime") public String wheeltime;
 }

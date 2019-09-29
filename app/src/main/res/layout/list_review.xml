@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView_name_LML"
+        android:id="@+id/place_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -19,21 +19,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
-        android:id="@+id/ratingBar_LML"
+        android:id="@+id/rating"
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:isIndicator="true"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_name_LML"
+        app:layout_constraintBottom_toBottomOf="@+id/place_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_name_LML"
-        app:layout_constraintTop_toTopOf="@+id/textView_name_LML" />
+        app:layout_constraintStart_toEndOf="@+id/place_name"
+        app:layout_constraintTop_toTopOf="@+id/place_name" />
 
     <TextView
-        android:id="@+id/textView_address_LML"
+        android:id="@+id/comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -42,16 +42,18 @@
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView_distanceLML"
+        app:layout_constraintEnd_toStartOf="@+id/delete_review"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_name_LML" />
+        app:layout_constraintTop_toBottomOf="@+id/place_name" />
 
-    <TextView
-        android:id="@+id/textView_distanceLML"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_address_LML"
+    <ImageButton
+        android:id="@+id/delete_review"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/delete"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView_address_LML" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

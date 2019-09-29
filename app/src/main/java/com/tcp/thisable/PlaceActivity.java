@@ -23,6 +23,9 @@ import com.tcp.thisable.Dao.Review;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,13 +37,17 @@ public class PlaceActivity extends AppCompatActivity {
     TextView tel;
     TextView homepage;
     RatingBar place_rating;
-    ListView place_review;
+    RecyclerView place_review;
     CheckBox checkBox[] = new CheckBox[12];
     Review review = new Review();
     Button button;
     View dialogView;
     EditText edit_review;
     RatingBar edit_rating;
+    RetrofitService service;
+
+    ListAdapter adapter;
+    ArrayList<Review> reviewArray = new ArrayList<>();
 
     Data place = new Data();
     String userid;
@@ -63,8 +70,11 @@ public class PlaceActivity extends AppCompatActivity {
         homepage = findViewById(R.id.homepage);
 
 
-        SharedPreferences shared = this.getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+        place_review.setLayoutManager(new LinearLayoutManager(this));
+
+        SharedPreferences shared = getSharedPreferences("MYPREFRENCE", MODE_PRIVATE);
         userid = shared.getString("userid",null);
+
         place.uniqueid = data.getInt("uniqueid");
         place.type = data.getString("type");
         place.name = data.getString("name");
@@ -100,12 +110,11 @@ public class PlaceActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     for (int i = 0; i < response.body().size(); i++) {
                         review = response.body().get(i);
-                        Log.d("review",review.rating+" ");
                         review.name = review.username;
                         reviewArray.add(review);
                     }
                 }
-                ListViewAdapter2 adapter = new ListViewAdapter2(reviewArray);
+                adapter = new ListAdapter(reviewArray, 1, userid);
                 place_review.setAdapter(adapter);
             }
 
@@ -129,7 +138,10 @@ public class PlaceActivity extends AppCompatActivity {
                         res2.enqueue(new Callback<Review>() {
                             @Override
                             public void onResponse(Call<Review> call, Response<Review> response) {
-
+                                if(response.isSuccessful()) {
+                                    reviewArray.add(0, response.body());
+                                    adapter.notifyItemInserted(0);
+                                }
                             }
 
                             @Override
@@ -142,7 +154,6 @@ public class PlaceActivity extends AppCompatActivity {
                 });
                 dlg.setNegativeButton("취소",null);
                 dlg.show();
-
             }
         });
 
