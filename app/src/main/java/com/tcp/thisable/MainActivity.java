@@ -5,14 +5,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     boolean data2Flag = true;
 
+    DBHelper dbHelper;
+
     Data data;
 
     @Override
@@ -57,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
+        dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
 
         type = getIntent().getStringExtra("type");
 
@@ -137,119 +145,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         searchEdittext = findViewById(R.id.search_editText);
+        searchEdittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int io, KeyEvent keyEvent) {
+                if(io == EditorInfo.IME_ACTION_SEARCH){
+                    requestData();
+                    return true;
+                }
+                return false;
+            }
+        });
         searchButton = findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double longitude = 126.97;
-                double latitude = 37.56;
-                if (mainMapFragment != null) {
-                    if (mainMapFragment.currentLocation != null) {
-                        longitude = mainMapFragment.currentLocation.longitude;
-                        latitude = mainMapFragment.currentLocation.latitude;
-                    }
-                }
-
-                if(data2Flag) {
-                    String query = "";
-
-                    int i = 1;
-                    for (ToggleButton toggle : advtoggle) {
-                        if (toggle.isChecked()) {
-                            list = dbHelper.getList(i);
-                        }
-                        i++;
-                    }
-
-
-                    JSONObject jsonObject = new JSONObject();
-                    String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
-
-                    try {
-                        for (int j = 0; j < 12; j++) {
-                            if (list[j] == 1) {
-                                jsonObject.put(keys[j], true);
-                            }
-                        }
-
-                        Log.d("json", jsonObject.toString());
-                        query = jsonObject.toString();
-
-                    } catch (Exception e) {
-                        query = "{}";
-                    }
-
-                    Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData(type, longitude, latitude, searchEdittext.getText().toString(), query);
-                    res.enqueue(new Callback<ArrayList<Data>>() {
-                        @Override
-                        public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
-                            Log.d("Retrofit", response.toString());
-                            if (response.body() != null) {
-                                listarray.clear();
-                                for (int i = 0; i < response.body().size(); i++) {
-                                    data = response.body().get(i);
-                                    listarray.add(data);
-                                }
-
-                                mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                                mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
-
-
-                                if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
-
-                                if (mainListFragment != null) {
-                                    if (mainMapFragment != null) {
-                                        if (mainMapFragment.currentLocation != null) {
-                                            mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
-                                        }
-                                    } else
-                                        mainListFragment.updateUi(listarray, null);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
-                            Log.d("Retrofit", t.toString());
-                        }
-                    });
-                }
-
-                else {
-                    Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData2(type, longitude, latitude, searchEdittext.getText().toString());
-                    res.enqueue(new Callback<ArrayList<Data>>() {
-                        @Override
-                        public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
-                            Log.d("Retrofit", response.toString());
-                            if (response.body() != null) {
-                                listarray.clear();
-                                for (int i = 0; i < response.body().size(); i++) {
-                                    data = response.body().get(i);
-                                    listarray.add(data);
-                                }
-
-                                mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                                mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
-
-                                if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
-
-                                if (mainListFragment != null) {
-                                    if (mainMapFragment != null) {
-                                        if (mainMapFragment.currentLocation != null) {
-                                            mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
-                                        }
-                                    } else
-                                        mainListFragment.updateUi(listarray, null);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
-                            Log.d("Retrofit", t.toString());
-                        }
-                    });
-                }
+                requestData();
             }
         });
 
@@ -257,6 +167,121 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_frame, mainMapFragment, "MAP").commit();
+    }
+
+    public void requestData() {
+        InputMethodManager mInputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager.hideSoftInputFromWindow(searchEdittext.getWindowToken(), 0);
+
+        double longitude = 126.97;
+        double latitude = 37.56;
+        if (mainMapFragment != null) {
+            if (mainMapFragment.currentLocation != null) {
+                longitude = mainMapFragment.currentLocation.longitude;
+                latitude = mainMapFragment.currentLocation.latitude;
+            }
+        }
+
+        if(data2Flag) {
+            String query = "";
+
+            int i = 1;
+            for (ToggleButton toggle : advtoggle) {
+                if (toggle.isChecked()) {
+                    list = dbHelper.getList(i);
+                }
+                i++;
+            }
+
+
+            JSONObject jsonObject = new JSONObject();
+            String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
+
+            try {
+                for (int j = 0; j < 12; j++) {
+                    if (list[j] == 1) {
+                        jsonObject.put(keys[j], true);
+                    }
+                }
+
+                Log.d("json", jsonObject.toString());
+                query = jsonObject.toString();
+
+            } catch (Exception e) {
+                query = "{}";
+            }
+
+            Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData(type, longitude, latitude, searchEdittext.getText().toString(), query);
+            res.enqueue(new Callback<ArrayList<Data>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
+                    Log.d("Retrofit", response.toString());
+                    if (response.body() != null) {
+                        listarray.clear();
+                        for (int i = 0; i < response.body().size(); i++) {
+                            data = response.body().get(i);
+                            listarray.add(data);
+                        }
+
+                        mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                        mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+
+                        if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                        if (mainListFragment != null) {
+                            if (mainMapFragment != null) {
+                                if (mainMapFragment.currentLocation != null) {
+                                    mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                }
+                            } else
+                                mainListFragment.updateUi(listarray, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
+                    Log.d("Retrofit", t.toString());
+                }
+            });
+        }
+
+        else {
+            Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData2(type, longitude, latitude, searchEdittext.getText().toString());
+            res.enqueue(new Callback<ArrayList<Data>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
+                    Log.d("Retrofit", response.toString());
+                    if (response.body() != null) {
+                        listarray.clear();
+                        for (int i = 0; i < response.body().size(); i++) {
+                            data = response.body().get(i);
+                            listarray.add(data);
+                        }
+
+                        mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                        mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+                        if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                        if (mainListFragment != null) {
+                            if (mainMapFragment != null) {
+                                if (mainMapFragment.currentLocation != null) {
+                                    mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                }
+                            } else
+                                mainListFragment.updateUi(listarray, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
+                    Log.d("Retrofit", t.toString());
+                }
+            });
+        }
     }
 
     public void setFragment(int n) {

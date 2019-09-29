@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,6 +104,29 @@ public class IndexActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),MypageActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        ImageButton logout_button = findViewById(R.id.logout);
+        logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder temp = new AlertDialog.Builder(IndexActivity.this);
+                temp.setMessage("로그아웃 하시겠습니까?");
+                temp.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        SharedPreferences shared = getApplication().getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = shared.edit();
+                        editor.remove("userid");
+                        editor.commit();
+                        finish(); }});
+                temp.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // 취소시 처리 로직
+                                Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
+                            }});
+                AlertDialog alert = temp.create();
+                alert.show();
             }
         });
 
