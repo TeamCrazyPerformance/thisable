@@ -13,7 +13,7 @@
         android:id="@+id/view2"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="#cccccc"
+        android:background="#bfbfbf"
         app:layout_constraintBottom_toBottomOf="@+id/hotel"
         app:layout_constraintEnd_toStartOf="@+id/hotel"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/view3"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="#cccccc"
+        android:background="#bfbfbf"
         app:layout_constraintBottom_toBottomOf="@+id/convinent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/convinent"
@@ -33,7 +33,7 @@
         android:id="@+id/view4"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="#cccccc"
+        android:background="#bfbfbf"
         app:layout_constraintBottom_toBottomOf="@+id/tour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -44,7 +44,7 @@
         android:id="@+id/view5"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="#cccccc"
+        android:background="#bfbfbf"
         app:layout_constraintBottom_toBottomOf="@+id/restaurant"
         app:layout_constraintEnd_toStartOf="@+id/restaurant"
         app:layout_constraintHorizontal_bias="0.0"
@@ -123,7 +123,7 @@
         android:id="@+id/imageView3"
         android:layout_width="210dp"
         android:layout_height="210dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -145,20 +145,20 @@
         app:srcCompat="@drawable/profile1"
         android:layout_marginRight="15dp" />
 
+
     <ImageButton
-        android:layout_width="27dp"
-        android:layout_height="27dp"
         android:id="@+id/logout"
-        android:layout_marginTop="13dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:background="#00ff0000"
         android:scaleType="fitCenter"
+        app:layout_constraintEnd_toStartOf="@+id/profile"
         app:layout_constraintRight_toLeftOf="@+id/profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logout"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="10dp"
-        />
-
+        app:srcCompat="@drawable/logout" />
 
     <ImageButton
         android:id="@+id/emergency"
