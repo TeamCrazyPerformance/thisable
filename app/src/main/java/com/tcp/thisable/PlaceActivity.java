@@ -33,6 +33,7 @@ public class PlaceActivity extends AppCompatActivity {
     TextView address;
     TextView tel;
     TextView homepage;
+    TextView place_name3;
     RatingBar place_rating;
     ListView place_review;
     CheckBox checkBox[] = new CheckBox[12];
@@ -124,8 +125,10 @@ public class PlaceActivity extends AppCompatActivity {
                 dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        place_name3 = dialogView.findViewById(R.id.place_name3);
                         edit_review = dialogView.findViewById(R.id.create_review);
                         edit_rating = dialogView.findViewById(R.id.create_rating);
+                        place_name3.setText(place.name);
                         Call<Review> res2 = NetRetrofit.getInstance().getService().writeReview(place.type,place.uniqueid,edit_review.getText().toString(),userid,place.name,edit_rating.getRating());
                         res2.enqueue(new Callback<Review>() {
                             @Override

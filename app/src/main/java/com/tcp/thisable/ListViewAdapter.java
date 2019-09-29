@@ -68,7 +68,6 @@ public class ListViewAdapter extends BaseAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("aaa",listVO.get(i).id+" "+listVO.get(i).userid);
                 Call<Integer> res = NetRetrofit.getInstance().getService().deleteReview(listVO.get(i).id,listVO.get(i).userid);
                 res.enqueue(new Callback<Integer>() {
                     @Override

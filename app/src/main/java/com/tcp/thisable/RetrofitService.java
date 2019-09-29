@@ -31,12 +31,13 @@ public interface RetrofitService {
     @POST("user/signup")
     Call<String> signUp(@Field("email") String email,@Field("password") String password,@Field("name") String name);
 
-    @FormUrlEncoded
-    @POST("data/{type}")
-    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Double longitude, @Field("latitude") Double latitude, @Field("text") String text, @Field("query") String query);
 
     @GET("review/{type}/{uniqueid}")
     Call<ArrayList<Review>> getReviewList(@Path("type") String type, @Path("uniqueid") int id);
+
+    @FormUrlEncoded
+    @POST("data/{type}")
+    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Double longitude, @Field("latitude") Double latitude, @Field("text") String text, @Field("query") String query);
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "review/", hasBody = true)

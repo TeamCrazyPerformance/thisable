@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -17,6 +18,7 @@ public class SearchActivity extends AppCompatActivity {
     int index;
     CheckBox checkBox[] = new CheckBox[12];
     Button update, delete;
+    ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class SearchActivity extends AppCompatActivity {
         final DBHelper dbHelper = new DBHelper(getApplicationContext(),"Search.db",null,1);
         update = findViewById(R.id.update);
         delete = findViewById(R.id.delete);
+        layout = findViewById(R.id.buttonlayout);
         checkBox[0] = findViewById(R.id.c1);
         checkBox[1] = findViewById(R.id.c2);
         checkBox[2] = findViewById(R.id.c3);
@@ -41,8 +44,9 @@ public class SearchActivity extends AppCompatActivity {
         checkBox[11] = findViewById(R.id.c12);
 
         if (index == -1) {
-            update.setText("CREATE");
-            update.setOnClickListener(new View.OnClickListener() {
+            layout.removeView(update);
+            delete.setText("CREATE");
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     list = new int[12];

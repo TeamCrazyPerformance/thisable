@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="40dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="20dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.2"
-        android:orientation="vertical">
+        android:layout_weight="0.22"
+        android:orientation="vertical"
+        android:background="@drawable/background2"
+        android:padding="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,7 +19,7 @@
             android:id="@+id/place_name2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text=""
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:textSize="30dp"
@@ -42,31 +40,32 @@
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="" />
 
         <TextView
             android:id="@+id/tel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="" />
 
         <TextView
             android:id="@+id/homepage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.4">
+        android:layout_weight="0.35"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="50dp">
+            android:padding="15dp">
 
 
             <CheckBox
@@ -156,29 +155,42 @@
         </LinearLayout>
     </ScrollView>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/common_google_signin_btn_text_light_focused"
+        android:layout_marginTop="10dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="15dp"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Review" />
+            android:text="REVIEW"
+            android:textSize="20dp"/>
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/create">
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/create"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/plus">
 
         </Button>
     </LinearLayout>
 
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.4">
+        android:layout_weight="0.35">
 
         <ListView
             android:layout_width="match_parent"

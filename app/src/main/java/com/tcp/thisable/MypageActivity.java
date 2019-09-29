@@ -1,15 +1,18 @@
 package com.tcp.thisable;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.tcp.thisable.Dao.Review;
@@ -23,7 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MypageActivity extends AppCompatActivity {
-
+    public static ListViewAdapter adapter;
     ListView listView;
     LinearLayout searchlayout;
     Review review;
@@ -43,11 +46,16 @@ public class MypageActivity extends AppCompatActivity {
         int size = dbHelper.getsize();
         for (int i = 1; i < size + 2; i++) {
 
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(80, 20, 80, 20);
+
             Button button = new Button(this);
+            button.setBackgroundResource(R.drawable.round_button);
             button.setBackgroundColor(Color.parseColor("#ffd633"));
-            //LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) button.getLayoutParams();
-            // params.setMargins(20,20,20,20);
-            //button.setLayoutParams(params);
+            button.setLayoutParams(params);
             button.setTextColor(Color.WHITE);
 
             if (i == size + 1) {
@@ -91,10 +99,11 @@ public class MypageActivity extends AppCompatActivity {
 
                     for (int i = 0; i < response.body().size(); i++) {
                         review = response.body().get(i);
+                        review.userid = userid;
                         listarray.add(review);
                     }
                 }
-                ListViewAdapter adapter = new ListViewAdapter(listarray);
+                adapter = new ListViewAdapter(listarray);
                 listView.setAdapter(adapter);
             }
 
@@ -105,5 +114,6 @@ public class MypageActivity extends AppCompatActivity {
         });
 
     }
+
 }
 

@@ -19,7 +19,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.662" />
+        app:srcCompat="@drawable/title4" />
+        app:layout_constraintVertical_bias="0.662"
 
     <EditText
         android:id="@+id/email"
@@ -68,7 +69,7 @@
         android:layout_marginTop="20dp"
         android:background="#00ff0000"
         android:elevation="10dp"
-        android:text="Sign in"
+        android:text="Sign up"
         android:textColor="#a0a0a0"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"

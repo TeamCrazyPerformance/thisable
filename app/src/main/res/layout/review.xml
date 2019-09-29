@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="10pt"
+            android:textSize="7pt"
             android:textStyle="bold"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
