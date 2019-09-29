@@ -33,18 +33,14 @@ public interface RetrofitService {
 
     @FormUrlEncoded
     @POST("data/{type}")
-    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Float longitude, @Field("latitude") Float latitude, @Field("text") String text, @Field("query") String query);
+    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Double longitude, @Field("latitude") Double latitude, @Field("text") String text, @Field("query") String query);
 
     @GET("review/{type}/{uniqueid}")
     Call<ArrayList<Review>> getReviewList(@Path("type") String type, @Path("uniqueid") int id);
 
     @FormUrlEncoded
-    @POST("data/{type}")
-    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Float longitude, @Field("latitude") Float latitude, @Field("text") String text, @Field("query") String query);
-
-    @FormUrlEncoded
     @HTTP(method = "DELETE", path = "review/", hasBody = true)
-    Call<Integer> deleteReview(@Field("id") String id,@Field("userid") String userid);
+    Call<Integer> deleteReview(@Field("id") String id, @Field("userid") String userid);
 
     @FormUrlEncoded
     @POST("review/{type}")

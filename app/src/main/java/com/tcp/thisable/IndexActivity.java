@@ -20,7 +20,6 @@ public class IndexActivity extends AppCompatActivity {
 
     Animation ani;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

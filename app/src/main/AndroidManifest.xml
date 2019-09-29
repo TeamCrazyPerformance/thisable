@@ -31,15 +31,12 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".MypageActivity"
-        </activity>
             android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".PlaceActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".SearchActivity"
-            android:screenOrientation="portrait">
-        </activity>
-         <activity android:name=".testActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".StartActivity"

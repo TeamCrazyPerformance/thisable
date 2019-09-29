@@ -64,11 +64,19 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
         listarray = d;
 
-        int i = 0;
+        int size = listarray.size();
+        float sum_longtitude = 0;
+        float sum_latitude = 0;
+
         for(Data data: listarray) {
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name);
             markers.add(gMap.addMarker(markerOptions));
+
+            sum_longtitude += data.location.coordinates[0];
+            sum_latitude += data.location.coordinates[1];
         }
+
+        moveCamera(new LatLng(sum_latitude/size, sum_longtitude/size), 12);
     }
 
     @Override
@@ -90,11 +98,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng SEOUL = new LatLng(37.56, 126.97);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         gMap = googleMap;
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(37.56, 126.97)));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -112,7 +120,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    moveCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                    moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), 15);
+                    setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
                 }
             });
 
@@ -122,14 +131,18 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                     fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            moveCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-                            //setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-                            //gMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                            moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), 15);
+                            setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
                         }
                     });
                     return false;
                 }
             });
+        }
+
+        else {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(37.56, 126.97)));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
 
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -209,11 +222,9 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void moveCurrentLocation(LatLng location)
+    private void moveCamera(LatLng location, float zoom)
     {
-        currentLocation = location;
-        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-        //gMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, zoom));
     }
 
     private void setCurrentLocation(LatLng location)
