@@ -134,8 +134,8 @@
 
     <ImageButton
         android:id="@+id/profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="#00ff0000"
@@ -143,12 +143,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile1"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="15dp" />
+
+    <ImageButton
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:id="@+id/logout"
+        android:layout_marginTop="13dp"
+        android:background="#00ff0000"
+        android:scaleType="fitCenter"
+        app:layout_constraintRight_toLeftOf="@+id/profile"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="10dp"
+        />
+
 
     <ImageButton
         android:id="@+id/emergency"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:background="#00ff0000"
