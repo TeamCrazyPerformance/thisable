@@ -1,13 +1,23 @@
 package com.tcp.thisable;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.tcp.thisable.Dao.Data;
 import com.tcp.thisable.Dao.Review;
 
 import java.util.ArrayList;
@@ -19,40 +29,55 @@ import retrofit2.Response;
 
 public class PlaceActivity extends AppCompatActivity {
 
-    TextView place_name2;
+    TextView place_name;
     TextView address;
     TextView tel;
     TextView homepage;
     RatingBar place_rating;
     ListView place_review;
-    int uniqueid;
-    String type;
     CheckBox checkBox[] = new CheckBox[12];
     Review review = new Review();
+    Button button;
+    View dialogView;
+    EditText edit_review;
+    RatingBar edit_rating;
+    RetrofitService service;
+
+
+    Data place = new Data();
+    String userid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
-        place_name2 = findViewById(R.id.place_name2);
+
+        place_name = findViewById(R.id.place_name2);
         address = findViewById(R.id.address);
         place_rating = findViewById(R.id.place_rating);
         place_review = findViewById(R.id.place_review);
+        button = findViewById(R.id.create);
         tel = findViewById(R.id.tel);
         homepage = findViewById(R.id.homepage);
-        uniqueid = data.getInt("uniqueid");
-        type = data.getString("type");
 
 
-        place_name2.setText(data.getString("name"));
-        address.setText(data.getString("address"));
-        tel.setText(data.getString("tel"));
-        homepage.setText(data.getString("homepage"));
+        SharedPreferences shared = this.getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+        userid = shared.getString("userid",null);
+        place.uniqueid = data.getInt("uniqueid");
+        place.type = data.getString("type");
+        place.name = data.getString("name");
+        place.address = data.getString("address");
+        place.tel = data.getString("tel");
+        place.homepage = data.getString("homepage");
 
-
+        place_name.setText(place.name);
+        tel.setText(place.tel);
+        homepage.setText(place.tel);
+        place_rating.setRating((float)data.getInt("rating_sum")/(float)data.getInt("rating_count"));
 
         (checkBox[0] = findViewById(R.id.p1)).setChecked(data.getBoolean("mainroad"));
         (checkBox[1] = findViewById(R.id.p2)).setChecked(data.getBoolean("parking"));
@@ -67,27 +92,58 @@ public class PlaceActivity extends AppCompatActivity {
         (checkBox[10] = findViewById(R.id.p11)).setChecked(data.getBoolean("guide"));
         (checkBox[11] = findViewById(R.id.p12)).setChecked(data.getBoolean("wheelchair"));
 
+        for(int i =0; i<12;i++) checkBox[i].setClickable(false);
 
-        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getReviewList(type,uniqueid);
+        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getReviewList(place.type,place.uniqueid);
         res.enqueue(new Callback<ArrayList<Review>>() {
             @Override
             public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
-                Log.d("Retrofit", response.toString());
-                ArrayList<Review> reviewarray = new ArrayList<>();
+                ArrayList<Review> reviewArray = new ArrayList<>();
                 if (response.body() != null) {
                     for (int i = 0; i < response.body().size(); i++) {
                         review = response.body().get(i);
                         review.name = review.username;
-                        reviewarray.add(review);
+                        reviewArray.add(review);
                     }
                 }
-                ListViewAdapter adapter = new ListViewAdapter(reviewarray);
+                ListViewAdapter adapter = new ListViewAdapter(reviewArray);
                 place_review.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<ArrayList<Review>> call, Throwable t) {
-                Log.d("Retrofit", t.toString());
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogView = View.inflate(PlaceActivity.this,R.layout.create_reivew,null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(PlaceActivity.this);
+                dlg.setView(dialogView);
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        edit_review = dialogView.findViewById(R.id.create_review);
+                        edit_rating = dialogView.findViewById(R.id.create_rating);
+                        Call<Review> res2 = NetRetrofit.getInstance().getService().writeReview(place.type,place.uniqueid,edit_review.getText().toString(),userid,place.name,edit_rating.getRating());
+                        res2.enqueue(new Callback<Review>() {
+                            @Override
+                            public void onResponse(Call<Review> call, Response<Review> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Review> call, Throwable t) {
+                            }
+                        });
+
+
+                    }
+                });
+                dlg.setNegativeButton("취소",null);
+                dlg.show();
+
             }
         });
 

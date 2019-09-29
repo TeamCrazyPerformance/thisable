@@ -6,18 +6,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-    TextView email_view;
-    TextView password_view;
+    EditText email_view;
+    EditText password_view;
+    Button sign_in;
+    Button sign_up;
     String email;
     String password;
     @Override
@@ -25,20 +33,56 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        NetRetrofit.getInstance().getService().signin(email, password).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-            }
+        email_view = findViewById(R.id.email);
+        password_view = findViewById(R.id.password);
+        sign_in = findViewById(R.id.sign_in);
+        sign_up = findViewById(R.id.sign_up);
 
+
+        sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onClick(View view) {
+                email = email_view.getText().toString();
+                password = password_view.getText().toString();
+                NetRetrofit.getInstance().getService().signIn(email, password).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        if(response.isSuccessful()) {
+                            SharedPreferences shared = getApplication().getSharedPreferences("MYPREFRENCE", Activity.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = shared.edit();
+                            editor.putString("userid", response.body());
+                            editor.commit();
+                            Intent intent = new Intent(getApplicationContext(), IndexActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        else{
+                            Toast.makeText(getApplicationContext(),"이메일 또는 비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
 
             }
         });
 
-        Intent intent = new Intent(getApplicationContext(),IndexActivity.class);
-        startActivity(intent);
-        finish();
+
+        sign_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
     }
 }

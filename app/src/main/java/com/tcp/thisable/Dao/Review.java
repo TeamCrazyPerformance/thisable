@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class Review {
-    @SerializedName("uniqueid") public Integer uniqueid;
+    @SerializedName("_id") public String id;
+    @SerializedName("uniqueid") public int uniqueid;
     @SerializedName("name") public String name;
     @SerializedName("type") public String type;
     @SerializedName("content") public String content;

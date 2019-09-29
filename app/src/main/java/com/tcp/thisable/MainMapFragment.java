@@ -190,6 +190,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                                 intent.putExtra("deaf",listarray.get(i).deaf);
                                 intent.putExtra("guide",listarray.get(i).guide);
                                 intent.putExtra("wheelchair",listarray.get(i).wheelchair);
+                                intent.putExtra("rating_sum",listarray.get(i).rating.sum);
+                                intent.putExtra("rating_count",listarray.get(i).rating.count);
                                 startActivity(intent);
                             }
                         }

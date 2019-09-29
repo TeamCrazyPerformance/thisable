@@ -36,14 +36,12 @@
         <Button
             android:id="@+id/delete_review"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:padding="0dp"
-            android:background="#ff4d4d"
-            android:text="DELETE"
+            android:background="@drawable/delete"
             android:textColor="#FFFFFF"
             android:layout_centerVertical="true"
-            android:textSize="15dp"
             />
     </RelativeLayout>
 

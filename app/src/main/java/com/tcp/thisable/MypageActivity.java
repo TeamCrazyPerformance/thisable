@@ -1,6 +1,8 @@
 package com.tcp.thisable;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,17 +28,19 @@ public class MypageActivity extends AppCompatActivity {
     LinearLayout searchlayout;
     Review review;
     ArrayList<Review> listarray = new ArrayList<>();
-
+    String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
+
         final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
         searchlayout = findViewById(R.id.searchlayout);
         listView = findViewById(R.id.review_list);
+        SharedPreferences shared = getApplication().getSharedPreferences("MYPREFRENCE",  Activity.MODE_PRIVATE);
+        userid = shared.getString("userid",null);
         int size = dbHelper.getsize();
-        Toast.makeText(getApplicationContext(), Integer.toString(size), Toast.LENGTH_LONG).show();
         for (int i = 1; i < size + 2; i++) {
 
             Button button = new Button(this);
@@ -78,7 +82,7 @@ public class MypageActivity extends AppCompatActivity {
         }
 
 
-        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getListRepos("5d8f29b5c69ca87bf20404f7");
+        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getListRepos(userid);
         res.enqueue(new Callback<ArrayList<Review>>() {
             @Override
             public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {

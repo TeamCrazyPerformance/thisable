@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Data {
     @SerializedName("type") public String type;
-    @SerializedName("uniqueid") public Integer uniqueid;
+    @SerializedName("uniqueid") public int uniqueid;
     @SerializedName("name") public String name;
     @SerializedName("gu") public String gu;
     @SerializedName("address") public String address;

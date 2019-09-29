@@ -1,6 +1,7 @@
 package com.tcp.thisable;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 import com.tcp.thisable.Dao.Review;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListViewAdapter extends BaseAdapter {
     private ArrayList<Review> listVO = null;
@@ -39,7 +44,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View convertView, ViewGroup parent) {
+    public View getView(final int i, View convertView, ViewGroup parent) {
         if (convertView == null)
         {
             final Context context = parent.getContext();
@@ -63,7 +68,19 @@ public class ListViewAdapter extends BaseAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("aaa",listVO.get(i).id+" "+listVO.get(i).userid);
+                Call<Integer> res = NetRetrofit.getInstance().getService().deleteReview(listVO.get(i).id,listVO.get(i).userid);
+                res.enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
 
+                    }
+
+                    @Override
+                    public void onFailure(Call<Integer> call, Throwable t) {
+
+                    }
+                });
 
             }
         });
