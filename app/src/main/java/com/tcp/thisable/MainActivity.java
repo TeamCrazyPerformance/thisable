@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,7 +24,11 @@ import com.gun0912.tedpermission.TedPermission;
 import com.tcp.thisable.Dao.Data;
 import com.tcp.thisable.Dao.Review;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Data> listarray = new ArrayList<>();
 
+    ArrayList<ToggleButton> advtoggle = new ArrayList<>();
+
     Data data;
 
     @Override
@@ -57,19 +64,39 @@ public class MainActivity extends AppCompatActivity {
         search_size = dbHelper.getsize();
         search_button_layout = findViewById(R.id.search_button_layout);
 
-        for(int i=1; i<search_size+1; i++){
-            Button button = new Button(this);
-            button.setText("맞춤검색"+i);
+        for(int i = 1; i < search_size + 1; i++){
+            ToggleButton toggleButton = new ToggleButton(this);
+            toggleButton.setTextOn("맞춤검색"+i);
+            toggleButton.setTextOff("맞춤검색"+i);
+            toggleButton.setText("맞춤검색"+i);
+
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            layoutParams.rightMargin = 30;
+            toggleButton.setMinimumHeight(0);
+            toggleButton.setMinHeight(0);
+            toggleButton.setBackgroundResource(R.drawable.custom_togglebutton_advsearch);
+
+            //toggleButton.setChecked(false);
+            search_button_layout.addView(toggleButton, layoutParams);
+
+            advtoggle.add(toggleButton);
+
             final int index = i;
-            button.setOnClickListener(new View.OnClickListener() {
+
+            toggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    list = dbHelper.getList(index);
+                    int ind = 1;
+                    for(ToggleButton toggle: advtoggle) {
+                        if(index == ind && toggle.isChecked())
+                            toggle.setChecked(true);
+                        else
+                            toggle.setChecked(false);
+
+                        ind++;
+                    }
                 }
             });
-
-            search_button_layout.addView(button);
-
         }
 
         PermissionListener permissionListener = new PermissionListener() {
@@ -109,14 +136,45 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 double longitude = 126.97;
                 double latitude = 37.56;
-                if(mainMapFragment != null) {
-                    if(mainMapFragment.currentLocation != null) {
+                if (mainMapFragment != null) {
+                    if (mainMapFragment.currentLocation != null) {
                         longitude = mainMapFragment.currentLocation.longitude;
                         latitude = mainMapFragment.currentLocation.latitude;
                     }
                 }
 
-                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", longitude, latitude, searchEdittext.getText().toString(), "{}");
+                int i = 1;
+                for (ToggleButton toggle : advtoggle) {
+                    if (toggle.isChecked()) {
+                        list = dbHelper.getList(i);
+                    }
+                    i++;
+                }
+
+                String query = "";
+
+                JSONObject jsonObject = new JSONObject();
+                String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
+
+                try {
+                    for (int j = 0; j < 12; j++)
+                    {
+                        if(list[j] == 1) {
+                            jsonObject.put(keys[j], true);
+                        }
+                    }
+
+                    Log.d("json", jsonObject.toString());
+                    query = jsonObject.toString();
+
+                }
+
+                catch (Exception e) {
+                    query = "{}";
+                }
+
+
+                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", longitude, latitude, searchEdittext.getText().toString(), query);
                 res.enqueue(new Callback<ArrayList<Data>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
