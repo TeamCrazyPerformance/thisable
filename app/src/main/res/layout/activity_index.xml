@@ -5,204 +5,132 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
     android:clipToPadding="false"
-    android:background="@drawable/startpage_color"
+    android:background="@android:color/white"
     tools:context=".StartActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tour"
+    <View
+        android:id="@+id/view2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/corner2"
-
-        android:elevation="10dp"
+        android:layout_height="2dp"
+        android:background="#6F6F6F"
         app:layout_constraintBottom_toBottomOf="@+id/hotel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/hotel"
-        app:layout_constraintTop_toTopOf="@+id/hotel"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:layout_constraintEnd_toStartOf="@+id/hotel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/hotel" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:padding="25dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/tour"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:elevation="11dp"
-            android:text="여행"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/convinent"
+    <View
+        android:id="@+id/view3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/corner3"
-        android:elevation="10dp"
+        android:layout_height="2dp"
+        android:background="#6F6F6F"
+        app:layout_constraintBottom_toBottomOf="@+id/convinent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/convinent"
+        app:layout_constraintTop_toTopOf="@+id/convinent" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="#6F6F6F"
+        app:layout_constraintBottom_toBottomOf="@+id/tour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/tour"
+        app:layout_constraintTop_toTopOf="@+id/tour" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="#6F6F6F"
         app:layout_constraintBottom_toBottomOf="@+id/restaurant"
-        app:layout_constraintEnd_toEndOf="@+id/tour"
-        app:layout_constraintStart_toStartOf="@+id/tour"
-        app:layout_constraintTop_toTopOf="@+id/restaurant">
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:padding="25dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/convinence2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:elevation="11dp"
-            android:text="편의시설"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toStartOf="@+id/restaurant"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/restaurant" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hotel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/corner2"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/corner"
         android:elevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/restaurant"
         app:layout_constraintEnd_toStartOf="@+id/tour"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintVertical_chainStyle="packed">
 
+
         <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:padding="25dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/lodgment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
+            android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:elevation="11dp"
-            android:text="숙박"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="27dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
-            app:layout_constraintTop_toTopOf="@+id/hotel" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/lodgment2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/corner3"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/corner"
         android:elevation="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/mark"
-        app:layout_constraintEnd_toEndOf="@+id/hotel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/convinent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/hotel"
-        app:layout_constraintTop_toBottomOf="@+id/hotel">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hotel"
+        app:layout_constraintHorizontal_chainStyle="packed">
 
-        <ImageView
+
+    <ImageView
             android:id="@+id/imageView5"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-
-            android:layout_marginLeft="8dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:padding="25dp"
             android:scaleType="fitStart"
-            android:src="@drawable/restaurant"
+            android:src="@drawable/restaurant2"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginLeft="36dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:elevation="11dp"
-            android:text="식당"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="264dp"
-        android:layout_height="268dp"
-        android:layout_marginBottom="320dp"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.662"
-        app:srcCompat="@drawable/title4" />
+        app:layout_constraintVertical_bias="0.16"
+        app:srcCompat="@drawable/title6" />
 
     <ImageButton
         android:id="@+id/profile"
@@ -237,15 +165,117 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/mark" />
 
-    android:layout_width="89dp"
-    android:layout_height="117dp"
-    app:srcCompat="@drawable/mark"
-    tools:layout_editor_absoluteX="-33dp"
-    tools:layout_editor_absoluteY="580dp"
-    tools:ignore="MissingConstraints" />
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:srcCompat="@drawable/mark" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/convinent"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/corner"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/restaurant"
+        app:layout_constraintTop_toBottomOf="@+id/tour">
 
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/convinence2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tour"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/corner"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/convinent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hotel"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:padding="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/tour2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="숙박"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/hotel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="식당"
+        app:layout_constraintBottom_toTopOf="@+id/view5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/restaurant"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="여행"
+        app:layout_constraintBottom_toTopOf="@+id/view4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/tour"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="편의"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/convinent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 </androidx.constraintlayout.widget.ConstraintLayout>
