@@ -33,7 +33,6 @@ public class PlaceActivity extends AppCompatActivity {
     TextView address;
     TextView tel;
     TextView homepage;
-    TextView place_name3;
     RatingBar place_rating;
     ListView place_review;
     CheckBox checkBox[] = new CheckBox[12];
@@ -42,8 +41,6 @@ public class PlaceActivity extends AppCompatActivity {
     View dialogView;
     EditText edit_review;
     RatingBar edit_rating;
-    RetrofitService service;
-
 
     Data place = new Data();
     String userid;
@@ -78,7 +75,7 @@ public class PlaceActivity extends AppCompatActivity {
         place_name.setText(place.name);
         tel.setText(place.tel);
         homepage.setText(place.tel);
-        place_rating.setRating((float)data.getInt("rating_sum")/(float)data.getInt("rating_count"));
+        place_rating.setRating(data.getFloat("rating_sum")/(float)data.getInt("rating_count"));
 
         (checkBox[0] = findViewById(R.id.p1)).setChecked(data.getBoolean("mainroad"));
         (checkBox[1] = findViewById(R.id.p2)).setChecked(data.getBoolean("parking"));
@@ -103,11 +100,12 @@ public class PlaceActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     for (int i = 0; i < response.body().size(); i++) {
                         review = response.body().get(i);
+                        Log.d("review",review.rating+" ");
                         review.name = review.username;
                         reviewArray.add(review);
                     }
                 }
-                ListViewAdapter adapter = new ListViewAdapter(reviewArray);
+                ListViewAdapter2 adapter = new ListViewAdapter2(reviewArray);
                 place_review.setAdapter(adapter);
             }
 
@@ -125,10 +123,8 @@ public class PlaceActivity extends AppCompatActivity {
                 dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        place_name3 = dialogView.findViewById(R.id.place_name3);
                         edit_review = dialogView.findViewById(R.id.create_review);
                         edit_rating = dialogView.findViewById(R.id.create_rating);
-                        place_name3.setText(place.name);
                         Call<Review> res2 = NetRetrofit.getInstance().getService().writeReview(place.type,place.uniqueid,edit_review.getText().toString(),userid,place.name,edit_rating.getRating());
                         res2.enqueue(new Callback<Review>() {
                             @Override

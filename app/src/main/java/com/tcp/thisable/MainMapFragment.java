@@ -154,8 +154,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                 bottom_name.setText(listarray.get(i).name);
                 bottom_address.setText(listarray.get(i).address);
 
-                bottom_rating.setMax(5);
-                bottom_rating.setRating((float) listarray.get(i).rating.sum / (float) listarray.get(i).rating.count);
+
+                bottom_rating.setRating(listarray.get(i).rating.sum / (float)listarray.get(i).rating.count);
 
                 if(currentLocation == null)
                     bottom_distance.setText("");
