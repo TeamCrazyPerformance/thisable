@@ -28,5 +28,5 @@ public interface RetrofitService {
 
     @FormUrlEncoded
     @POST("data/{type}")
-    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") Float longitude, @Field("latitude") Float latitude, @Field("text") String text, @Field("query") String query);
+    Call<ArrayList<Data>> getSearchData(@Path("type") String type, @Field("longitude") double longitude, @Field("latitude") double latitude, @Field("text") String text, @Field("query") String query);
 }

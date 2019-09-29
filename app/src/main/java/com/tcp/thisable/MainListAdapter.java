@@ -1,6 +1,7 @@
 package com.tcp.thisable;
 
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.tcp.thisable.Dao.Data;
 
 import java.util.ArrayList;
 
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewHolder> {
     private ArrayList<Data> datalist;
+    private Location currentLocation = null;
 
     public class mViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textView_name;
@@ -60,8 +63,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewH
         }
     }
 
-    public MainListAdapter(ArrayList<Data> datalist) {
+    public MainListAdapter(ArrayList<Data> datalist, Location currentLocation) {
         this.datalist = datalist;
+        this.currentLocation = currentLocation;
     }
 
     @Override
@@ -79,11 +83,36 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewH
 
         holder.ratingBar.setMax(5);
         holder.ratingBar.setRating((float) datalist.get(position).rating.sum / (float) datalist.get(position).rating.count);
+
+        if(currentLocation == null)
+            holder.textView_distance.setText("");
+        else {
+            Location location = new Location("");
+            location.setLongitude(datalist.get(position).location.coordinates[0]);
+            location.setLatitude(datalist.get(position).location.coordinates[1]);
+
+            int distance = Math.round(currentLocation.distanceTo(location));
+
+            if(distance > 1000) {
+                holder.textView_distance.setText(Math.round(distance / 1000f * 10) / 10f + "km");
+            }
+
+            else {
+                holder.textView_distance.setText(distance + "m");
+            }
+
+        }
     }
 
     @Override
     public int getItemCount() {
         if(datalist != null) return datalist.size();
         else return 0;
+    }
+
+    public void setCurrentLocation(LatLng currentLocation) {
+        this.currentLocation = new Location("");
+        this.currentLocation.setLongitude(currentLocation.longitude);
+        this.currentLocation.setLatitude(currentLocation.latitude);
     }
 }

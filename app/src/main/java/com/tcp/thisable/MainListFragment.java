@@ -1,5 +1,6 @@
 package com.tcp.thisable;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.tcp.thisable.Dao.Data;
 
 import java.util.ArrayList;
@@ -24,11 +26,13 @@ public class MainListFragment extends Fragment {
     public MainListFragment() {
     }
 
-    public void updateUi(ArrayList<Data> d) {
+    public void updateUi(ArrayList<Data> d, LatLng currentLocation) {
         listarray.clear();
         listarray.addAll(d);
-
-        if(adapter != null) adapter.notifyDataSetChanged();
+        if(adapter != null) {
+            adapter.setCurrentLocation(currentLocation);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -36,10 +40,17 @@ public class MainListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_list, container, false);
 
-        recyclerView = view.findViewById(R.id.recyvlerview_FML);
+        recyclerView = view.findViewById(R.id.recyclerview_FML);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new MainListAdapter(listarray);
+        Location currentLocation = null;
+
+        if(getArguments() != null) {
+            currentLocation = new Location("");
+            currentLocation.setLongitude(getArguments().getDouble("longitude"));
+            currentLocation.setLatitude(getArguments().getDouble("latitude"));
+        }
+        adapter = new MainListAdapter(listarray, currentLocation);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -1,11 +1,15 @@
 package com.tcp.thisable;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -14,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +33,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.tcp.thisable.Dao.Data;
 
 import java.util.ArrayList;
@@ -33,13 +42,19 @@ import java.util.ArrayList;
 public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
 
-    ArrayList<Data> listarray = new ArrayList<>();
-    GoogleMap gMap;
-    ConstraintLayout constraintLayout_bottom;
-    TextView bottom_name;
-    TextView bottom_address;
+    private ArrayList<Data> listarray = new ArrayList<>();
+    private GoogleMap gMap;
+    private ConstraintLayout constraintLayout_bottom;
+    private TextView bottom_name;
+    private TextView bottom_address;
+    private TextView bottom_distance;
+    private RatingBar bottom_rating;
 
-    ArrayList<Marker> markers = new ArrayList<>();
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    public LatLng currentLocation = null;
+
+    private ArrayList<Marker> markers = new ArrayList<>();
 
     public MainMapFragment() {
     }
@@ -54,7 +69,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(data.location.coordinates[1], data.location.coordinates[0])).title(data.name);
             markers.add(gMap.addMarker(markerOptions));
         }
-
     }
 
     @Override
@@ -68,6 +82,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         constraintLayout_bottom = view.findViewById(R.id.constraintLayout_bottomFMM);
         bottom_address = view.findViewById(R.id.textView_addressFMM);
         bottom_name = view.findViewById(R.id.textView_nameFMM);
+        bottom_distance = view.findViewById(R.id.textView_distanceFMM);
+        bottom_rating = view.findViewById(R.id.ratingBar_FMM);
 
         return view;
     }
@@ -76,17 +92,80 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         LatLng SEOUL = new LatLng(37.56, 126.97);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         gMap = googleMap;
+
+        int hasFineLocationPermission = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if( hasFineLocationPermission == PackageManager.PERMISSION_GRANTED && hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED ) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+            Log.d("asdsad", "Asdasdasds");
+            gMap.setMyLocationEnabled(true);
+            gMap.getUiSettings().setMyLocationButtonEnabled(true);
+            gMap.getUiSettings().setMapToolbarEnabled(false);
+
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    moveCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                }
+            });
+
+            gMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            moveCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                            //setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                            //gMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        }
+                    });
+                    return false;
+                }
+            });
+        }
 
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 final int i = markers.indexOf(marker);
+
                 constraintLayout_bottom.setVisibility(View.VISIBLE);
                 bottom_name.setText(listarray.get(i).name);
                 bottom_address.setText(listarray.get(i).address);
+
+                bottom_rating.setMax(5);
+                bottom_rating.setRating((float) listarray.get(i).rating.sum / (float) listarray.get(i).rating.count);
+
+                if(currentLocation == null)
+                    bottom_distance.setText("");
+                else {
+                    Location location = new Location("");
+                    location.setLongitude(listarray.get(i).location.coordinates[0]);
+                    location.setLatitude(listarray.get(i).location.coordinates[1]);
+
+                    Location curlocation = new Location("");
+                    curlocation.setLongitude(currentLocation.longitude);
+                    curlocation.setLatitude(currentLocation.latitude);
+
+                    int distance = Math.round(curlocation.distanceTo(location));
+
+                    if(distance > 1000) {
+                        bottom_distance.setText(Math.round(distance / 1000f * 10) / 10f + "km");
+                    }
+
+                    else {
+                        bottom_distance.setText(distance + "m");
+                    }
+
+                }
 
                 constraintLayout_bottom.setOnClickListener(
                         new View.OnClickListener() {
@@ -126,6 +205,18 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                 constraintLayout_bottom.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void moveCurrentLocation(LatLng location)
+    {
+        currentLocation = location;
+        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+        //gMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    private void setCurrentLocation(LatLng location)
+    {
+        currentLocation = location;
     }
 
     @Override

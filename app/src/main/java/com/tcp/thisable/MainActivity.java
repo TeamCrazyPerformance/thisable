@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,14 +12,19 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.tcp.thisable.Dao.Data;
 import com.tcp.thisable.Dao.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     EditText searchEdittext;
 
     int search_size;
-    int list[];
+    int[] list;
 
     ArrayList<Data> listarray = new ArrayList<>();
 
@@ -66,7 +72,23 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+            }
 
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("현재 위치를 알기 위해서는 접근 권한이 필요합니다.")
+                .setDeniedMessage("[설정] -> [권한]에서 권한을 허용할 수 있습니다.")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                .check();
 
         toggleButton = findViewById(R.id.toggleButton_main);
 
@@ -85,8 +107,16 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                double longitude = 126.97;
+                double latitude = 37.56;
+                if(mainMapFragment != null) {
+                    if(mainMapFragment.currentLocation != null) {
+                        longitude = mainMapFragment.currentLocation.longitude;
+                        latitude = mainMapFragment.currentLocation.latitude;
+                    }
+                }
 
-                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", 127f, 30f, searchEdittext.getText().toString(), "{}");
+                Call<ArrayList<Data>> res = NetRetrofit.getInstance().getService().getSearchData("hotel", longitude, latitude, searchEdittext.getText().toString(), "{}");
                 res.enqueue(new Callback<ArrayList<Data>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
@@ -101,8 +131,19 @@ public class MainActivity extends AppCompatActivity {
                             mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
                             mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
 
+
                             if(mainMapFragment != null) mainMapFragment.updateUi(listarray);
-                            if(mainListFragment != null) mainListFragment.updateUi(listarray);
+
+                            if(mainListFragment != null) {
+                                if(mainMapFragment != null) {
+                                    if(mainMapFragment.currentLocation != null) {
+                                        mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                    }
+                                }
+
+                                else
+                                    mainListFragment.updateUi(listarray, null);
+                            }
                         }
                     }
 
@@ -136,8 +177,22 @@ public class MainActivity extends AppCompatActivity {
         else if(n == 1) {
             if(mainListFragment == null) {
                 mainListFragment = new MainListFragment();
+
+                if(mainMapFragment != null && mainMapFragment.currentLocation != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("longitude", mainMapFragment.currentLocation.longitude);
+                    bundle.putDouble("latitude", mainMapFragment.currentLocation.latitude);
+                    mainListFragment.setArguments(bundle);
+                }
+
                 fragmentManager.beginTransaction().add(R.id.fragment_frame, mainListFragment, "LIST").commit();
-                mainListFragment.updateUi(listarray);
+
+                if(mainMapFragment != null && mainMapFragment.currentLocation != null) {
+                    mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                }
+                else {
+                    mainListFragment.updateUi(listarray, null);
+                }
             }
 
             if(mainMapFragment != null) fragmentManager.beginTransaction().hide(mainMapFragment).commit();

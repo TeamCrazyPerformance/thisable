@@ -65,7 +65,7 @@ public class PlaceActivity extends AppCompatActivity {
         (checkBox[8] = findViewById(R.id.p9)).setChecked(data.getBoolean("blind"));
         (checkBox[9] = findViewById(R.id.p10)).setChecked(data.getBoolean("deaf"));
         (checkBox[10] = findViewById(R.id.p11)).setChecked(data.getBoolean("guide"));
-        (checkBox[11] = findViewById(R.id.p2)).setChecked(data.getBoolean("wheelchair"));
+        (checkBox[11] = findViewById(R.id.p12)).setChecked(data.getBoolean("wheelchair"));
 
 
         Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getReviewList(type,uniqueid);
