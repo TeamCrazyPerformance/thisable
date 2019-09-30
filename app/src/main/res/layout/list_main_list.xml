@@ -26,6 +26,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:isIndicator="true"
+        android:stepSize="0.5"
         app:layout_constraintBottom_toBottomOf="@+id/textView_name_LML"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -42,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email = email_view.getText().toString();
-                password = password_view.getText().toString();
+                email = email_view.getText().toString().trim();
+                password = password_view.getText().toString().trim();
                 NetRetrofit.getInstance().getService().signIn(email, password).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
@@ -59,13 +59,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         else{
-                            Toast.makeText(getApplicationContext(),"이메일 또는 비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"이메일 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-
+                        Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

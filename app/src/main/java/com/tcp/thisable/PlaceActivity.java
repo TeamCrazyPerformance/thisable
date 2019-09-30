@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -84,7 +86,12 @@ public class PlaceActivity extends AppCompatActivity {
 
         place_name.setText(place.name);
         tel.setText(place.tel);
-        homepage.setText(place.tel);
+        homepage.setText(Html.fromHtml("<a href=\"" + place.homepage + "\">" + place.homepage +"</a>"));
+
+
+        homepage.setMovementMethod(LinkMovementMethod.getInstance());
+
+        place_rating.setStepSize(0.5f);
         place_rating.setRating(data.getFloat("rating_sum")/(float)data.getInt("rating_count"));
 
         (checkBox[0] = findViewById(R.id.p1)).setChecked(data.getBoolean("mainroad"));
@@ -106,20 +113,26 @@ public class PlaceActivity extends AppCompatActivity {
         res.enqueue(new Callback<ArrayList<Review>>() {
             @Override
             public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
-                ArrayList<Review> reviewArray = new ArrayList<>();
-                if (response.body() != null) {
-                    for (int i = 0; i < response.body().size(); i++) {
-                        review = response.body().get(i);
-                        review.name = review.username;
-                        reviewArray.add(review);
+                if(response.isSuccessful()) {
+                    reviewArray = new ArrayList<>();
+                    if (response.body() != null) {
+                        for (int i = 0; i < response.body().size(); i++) {
+                            review = response.body().get(i);
+                            review.name = review.username;
+                            reviewArray.add(review);
+                        }
                     }
+                    adapter = new ListAdapter(reviewArray, 1);
+                    place_review.setAdapter(adapter);
                 }
-                adapter = new ListAdapter(reviewArray, 1, userid);
-                place_review.setAdapter(adapter);
+                else {
+                    Toast.makeText(getApplicationContext(), "리뷰를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Review>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -139,13 +152,18 @@ public class PlaceActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Review> call, Response<Review> response) {
                                 if(response.isSuccessful()) {
+                                    //Log.d("err1", response.body().content);
                                     reviewArray.add(0, response.body());
                                     adapter.notifyItemInserted(0);
+                                }
+                                else {
+                                    Toast.makeText(getApplicationContext(), "리뷰가 작성되지 않았습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<Review> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -153,7 +171,7 @@ public class PlaceActivity extends AppCompatActivity {
                     }
                 });
                 dlg.setNegativeButton("취소",null);
-                dlg.show();
+                dlg.create().show();
             }
         });
 

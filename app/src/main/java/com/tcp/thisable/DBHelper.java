@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -28,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int size = 0;
         Cursor cursor = db.rawQuery("SELECT * FROM SEARCH", null);
         while (cursor.moveToNext()) size++;
+        cursor.close();
         return size;
         }
 
@@ -53,6 +56,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<Integer> getAllList() {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Integer> res = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM SEARCH", null);
+        while (cursor.moveToNext()) {
+            res.add(cursor.getInt(0));
+        }
+        cursor.close();
+        return res;
+    }
+
     public int[] getList(int id) {
         // 읽기가 가능하게 DB 열기
         SQLiteDatabase db = getReadableDatabase();
@@ -60,12 +75,13 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM SEARCH", null);
         while (cursor.moveToNext()) {
             if (cursor.getInt(0) == id){
-                for (int i =1 ; i < 13 ; i++){
-                    result[i-1] = cursor.getInt(i);
+                for (int i =0 ; i < 12 ; i++){
+                    result[i] = cursor.getInt(i+1);
                 }
                 break;
             }
         }
+        cursor.close();
         return result;
     }
 

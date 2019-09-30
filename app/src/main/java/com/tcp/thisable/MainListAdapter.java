@@ -59,6 +59,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewH
             intent.putExtra("deaf", datalist.get(getLayoutPosition()).deaf);
             intent.putExtra("guide", datalist.get(getLayoutPosition()).guide);
             intent.putExtra("wheelchair", datalist.get(getLayoutPosition()).wheelchair);
+            intent.putExtra("rating_sum",datalist.get(getLayoutPosition()).rating.sum);
+            intent.putExtra("rating_count",datalist.get(getLayoutPosition()).rating.count);
             view.getContext().startActivity(intent);
         }
     }
@@ -82,7 +84,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.mViewH
         holder.textView_address.setText(datalist.get(position).address);
 
         holder.ratingBar.setMax(5);
-        holder.ratingBar.setRating((float) datalist.get(position).rating.sum / (float) datalist.get(position).rating.count);
+        holder.ratingBar.setStepSize(0.5f);
+        holder.ratingBar.setRating(datalist.get(position).rating.sum / (float) datalist.get(position).rating.count);
 
         if(currentLocation == null)
             holder.textView_distance.setText("");

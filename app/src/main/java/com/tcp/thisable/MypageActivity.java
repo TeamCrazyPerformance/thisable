@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.tcp.thisable.Dao.Review;
 
@@ -31,12 +32,13 @@ public class MypageActivity extends AppCompatActivity {
     ArrayList<Review> listarray = new ArrayList<>();
     String userid;
 
+    ArrayList<Integer> allList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
         searchlayout = findViewById(R.id.searchlayout);
         listView = findViewById(R.id.review_list);
 
@@ -44,9 +46,50 @@ public class MypageActivity extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences("MYPREFRENCE",  MODE_PRIVATE);
         userid = shared.getString("userid",null);
 
-        int size = dbHelper.getsize();
-        for (int i = 1; i < size + 2; i++) {
 
+        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getListRepos(userid);
+        res.enqueue(new Callback<ArrayList<Review>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
+                //Log.d("Retrofit", response.toString());
+                if(response.isSuccessful()) {
+                    if (response.body() != null) {
+
+                        //listarray.addAll(response.body());
+                        for (int i = 0; i < response.body().size(); i++) {
+                            review = response.body().get(i);
+                            review.userid = userid;
+                            listarray.add(review);
+                        }
+                        adapter = new ListAdapter(listarray, 0);
+                        listView.setAdapter(adapter);
+                    }
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), "리뷰를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Review>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        searchlayout.removeAllViews();
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Search.db", null, 1);
+
+        allList.clear();
+        allList.addAll(dbHelper.getAllList());
+
+        int ind = 1;
+        for(int i: allList) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -59,63 +102,47 @@ public class MypageActivity extends AppCompatActivity {
             button.setLayoutParams(params);
             button.setTextColor(Color.WHITE);
 
-            if (i == size + 1) {
-                button.setText("+");
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
-                        intent2.putExtra("index", -1);
-                        startActivity(intent2);
-                        finish();
+            button.setText("맞춤조건" + ind);
+            final int finalI = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
+                    intent2.putExtra("index", finalI);
+                    startActivity(intent2);
 
-                    }
-                });
-            } else {
-                button.setText("맞춤조건" + i);
-                final int finalI = i;
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
-                        intent2.putExtra("index", finalI);
-                        startActivity(intent2);
-                        finish();
-
-                    }
-                });
-            }
+                }
+            });
 
             searchlayout.addView(button);
 
+            ind++;
         }
 
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(80, 20, 80, 20);
 
-        Call<ArrayList<Review>> res = NetRetrofit.getInstance().getService().getListRepos(userid);
-        res.enqueue(new Callback<ArrayList<Review>>() {
+        Button button = new Button(this);
+        button.setBackgroundResource(R.drawable.round_button);
+        button.setBackgroundColor(Color.parseColor("#ffd633"));
+        button.setLayoutParams(params);
+        button.setTextColor(Color.WHITE);
+
+        button.setText("+");
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
-                Log.d("Retrofit", response.toString());
-                if (response.body() != null) {
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getApplicationContext(), SearchActivity.class);
+                intent2.putExtra("index", -1);
+                startActivity(intent2);
 
-                    //listarray.addAll(response.body());
-                    for (int i = 0; i < response.body().size(); i++) {
-                        review = response.body().get(i);
-                        review.userid = userid;
-                        listarray.add(review);
-                    }
-                    adapter = new ListAdapter(listarray, 0, userid);
-                    listView.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Review>> call, Throwable t) {
-                Log.d("Retrofit", t.toString());
             }
         });
 
+        searchlayout.addView(button);
     }
-
 }
 

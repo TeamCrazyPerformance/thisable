@@ -36,9 +36,9 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                email = email_view.getText().toString();
-                name = name_view.getText().toString();
-                pass = pass_view.getText().toString();
+                email = email_view.getText().toString().trim();
+                name = name_view.getText().toString().trim();
+                pass = pass_view.getText().toString().trim();
 
                 Call<String> res = NetRetrofit.getInstance().getService().signUp(email,pass,name);
                 res.enqueue(new Callback<String>() {
@@ -54,7 +54,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t){
-
+                        Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

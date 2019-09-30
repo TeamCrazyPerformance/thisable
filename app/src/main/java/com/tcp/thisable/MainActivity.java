@@ -28,6 +28,7 @@ import com.tcp.thisable.Dao.Data;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String type = null;
 
     ArrayList<Data> listarray = new ArrayList<>();
+    ArrayList<Integer> allList = new ArrayList<>();
 
     ArrayList<ToggleButton> advtoggle = new ArrayList<>();
 
@@ -75,14 +77,17 @@ public class MainActivity extends AppCompatActivity {
 
         else {
             data2Flag = true;
-            search_size = dbHelper.getsize();
             search_button_layout = findViewById(R.id.search_button_layout);
 
-            for (int i = 1; i < search_size + 1; i++) {
+            allList.clear();
+            allList.addAll(dbHelper.getAllList());
+
+            int fakeind = 1;
+            for(int i: allList) {
                 ToggleButton toggleButton = new ToggleButton(this);
-                toggleButton.setTextOn("맞춤검색" + i);
-                toggleButton.setTextOff("맞춤검색" + i);
-                toggleButton.setText("맞춤검색" + i);
+                toggleButton.setTextOn("맞춤검색" + fakeind);
+                toggleButton.setTextOff("맞춤검색" + fakeind);
+                toggleButton.setText("맞춤검색" + fakeind);
 
                 LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                 layoutParams.rightMargin = 30;
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                 advtoggle.add(toggleButton);
 
-                final int index = i;
+                final int index = fakeind;
 
                 toggleButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,12 +116,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                fakeind++;
             }
         }
 
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
+                if(mainMapFragment != null)
+                    mainMapFragment.updatePermission();
             }
 
             @Override
@@ -185,14 +194,15 @@ public class MainActivity extends AppCompatActivity {
         if(data2Flag) {
             String query = "";
 
+            list = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
             int i = 1;
             for (ToggleButton toggle : advtoggle) {
                 if (toggle.isChecked()) {
-                    list = dbHelper.getList(i);
+                    list = dbHelper.getList(allList.get(i-1));
                 }
                 i++;
             }
-
 
             JSONObject jsonObject = new JSONObject();
             String[] keys = {"mainroad", "parking", "mainflat", "elevator", "toilet", "room", "seat", "ticket", "blind", "deaf", "guide", "wheelchair"};
@@ -204,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Log.d("json", jsonObject.toString());
+                //Log.d("json", jsonObject.toString());
                 query = jsonObject.toString();
 
             } catch (Exception e) {
@@ -215,34 +225,39 @@ public class MainActivity extends AppCompatActivity {
             res.enqueue(new Callback<ArrayList<Data>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
-                    Log.d("Retrofit", response.toString());
-                    if (response.body() != null) {
-                        listarray.clear();
-                        for (int i = 0; i < response.body().size(); i++) {
-                            data = response.body().get(i);
-                            listarray.add(data);
+                    if(response.isSuccessful()) {
+                        if (response.body() != null) {
+                            listarray.clear();
+                            for (int i = 0; i < response.body().size(); i++) {
+                                data = response.body().get(i);
+                                listarray.add(data);
+                            }
+
+                            mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                            mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+
+                            if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                            if (mainListFragment != null) {
+                                if (mainMapFragment != null) {
+                                    if (mainMapFragment.currentLocation != null) {
+                                        mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                    }
+                                } else
+                                    mainListFragment.updateUi(listarray, null);
+                            }
                         }
+                    }
 
-                        mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                        mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
-
-
-                        if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
-
-                        if (mainListFragment != null) {
-                            if (mainMapFragment != null) {
-                                if (mainMapFragment.currentLocation != null) {
-                                    mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
-                                }
-                            } else
-                                mainListFragment.updateUi(listarray, null);
-                        }
+                    else {
+                        Toast.makeText(getApplicationContext(), "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
-                    Log.d("Retrofit", t.toString());
+                    Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -252,33 +267,39 @@ public class MainActivity extends AppCompatActivity {
             res.enqueue(new Callback<ArrayList<Data>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Data>> call, Response<ArrayList<Data>> response) {
-                    Log.d("Retrofit", response.toString());
-                    if (response.body() != null) {
-                        listarray.clear();
-                        for (int i = 0; i < response.body().size(); i++) {
-                            data = response.body().get(i);
-                            listarray.add(data);
+                    //Log.d("Retrofit", response.toString());
+                    if(response.isSuccessful()) {
+                        if (response.body() != null) {
+                            listarray.clear();
+                            for (int i = 0; i < response.body().size(); i++) {
+                                data = response.body().get(i);
+                                listarray.add(data);
+                            }
+
+                            mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
+                            mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
+
+                            if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
+
+                            if (mainListFragment != null) {
+                                if (mainMapFragment != null) {
+                                    if (mainMapFragment.currentLocation != null) {
+                                        mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
+                                    }
+                                } else
+                                    mainListFragment.updateUi(listarray, null);
+                            }
                         }
+                    }
 
-                        mainMapFragment = (MainMapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
-                        mainListFragment = (MainListFragment) getSupportFragmentManager().findFragmentByTag("LIST");
-
-                        if (mainMapFragment != null) mainMapFragment.updateUi(listarray);
-
-                        if (mainListFragment != null) {
-                            if (mainMapFragment != null) {
-                                if (mainMapFragment.currentLocation != null) {
-                                    mainListFragment.updateUi(listarray, mainMapFragment.currentLocation);
-                                }
-                            } else
-                                mainListFragment.updateUi(listarray, null);
-                        }
+                    else {
+                        Toast.makeText(getApplicationContext(), "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<Data>> call, Throwable t) {
-                    Log.d("Retrofit", t.toString());
+                    Toast.makeText(getApplicationContext(), "서버가 응답하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

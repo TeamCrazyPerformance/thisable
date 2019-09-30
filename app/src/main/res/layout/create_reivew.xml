@@ -10,8 +10,9 @@
         android:id="@+id/create_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:max="5"
-        android:layout_marginTop="10dp"/>
+        android:stepSize="0.5" />
 
     <EditText
         android:id="@+id/create_review"

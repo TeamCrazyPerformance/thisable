@@ -43,7 +43,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
 
     private ArrayList<Data> listarray = new ArrayList<>();
-    private GoogleMap gMap;
+    private GoogleMap gMap = null;
     private ConstraintLayout constraintLayout_bottom;
     private TextView bottom_name;
     private TextView bottom_address;
@@ -60,6 +60,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Marker> markers = new ArrayList<>();
 
     public MainMapFragment() {
+    }
+
+    public void updatePermission() {
+        if(gMap != null)
+            onMapReady(gMap);
     }
 
     public void updateUi(ArrayList<Data> d) {
@@ -107,7 +112,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         gMap = googleMap;
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(37.56, 126.97)));
@@ -121,7 +125,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
         if( hasFineLocationPermission == PackageManager.PERMISSION_GRANTED && hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED ) {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-            Log.d("asdsad", "Asdasdasds");
+            //Log.d("asdsad", "Asdasdasds");
             gMap.setMyLocationEnabled(true);
             gMap.getUiSettings().setMyLocationButtonEnabled(true);
             gMap.getUiSettings().setMapToolbarEnabled(false);
@@ -159,7 +163,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 final int i = markers.indexOf(marker);
 
-                Log.d("asd", markers.size() + "," + listarray.size());
+                //Log.d("asd", markers.size() + "," + listarray.size());
 
                 constraintLayout_bottom.setVisibility(View.VISIBLE);
                 bottom_name.setText(listarray.get(i).name);
@@ -194,6 +198,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback {
                     bottom_extra1.setVisibility(View.GONE);
                     bottom_extra2.setVisibility(View.GONE);
 
+                    bottom_rating.setStepSize(0.5f);
                     bottom_rating.setRating(listarray.get(i).rating.sum / (float) listarray.get(i).rating.count);
                     constraintLayout_bottom.setOnClickListener(
                             new View.OnClickListener() {

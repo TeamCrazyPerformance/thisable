@@ -55,8 +55,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     dbHelper.insert(list);
                     finish();
-                    Intent intent1 = new Intent(getApplicationContext(),MypageActivity.class);
-                    startActivity(intent1);
 
                 }
             });
@@ -76,8 +74,6 @@ public class SearchActivity extends AppCompatActivity {
                         list[i] = checkBox[i].isChecked()? 1 : 0;
                     }
                     dbHelper.update(index,list);
-                    Intent intent1 = new Intent(getApplicationContext(),MypageActivity.class);
-                    startActivity(intent1);
                     finish();
                 }
             });
@@ -86,8 +82,6 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     dbHelper.delete(index);
-                    Intent intent1 = new Intent(getApplicationContext(),MypageActivity.class);
-                    startActivity(intent1);
                     finish();
                 }
             });
